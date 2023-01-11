@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camthi14/Blog.git"
+  },
+  "author": "CamThi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camthi14/Blog/issues"
+  },
+  "homepage": "https://github.com/camthi14/Blog#readme"
+}
