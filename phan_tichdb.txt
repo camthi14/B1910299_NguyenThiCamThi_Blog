@@ -1,0 +1,23 @@
+DB:
+-role
+-user
+    +user_id
+    +email(index)
+    +password
+    +full_name(index)
+    +key_change_password
+    +image
+    +disable
+    _roleId: {ref:roles}
+-categories
+    +category_id
+    +name(index)
+    +slug(index)
+    +level
+    +parent_id
+-posts
+    +post_id
+    +detail_post
+    +slug
+    +detail_html
+    +title_post(index)
