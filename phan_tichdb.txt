@@ -21,3 +21,60 @@ DB:
     +slug
     +detail_html
     +title_post(index)
+
+-paging
+
+    +page
+    +limit
+
+skip().limit()
+
+=> page = 1, limit = 2;
+skip((page-1)*limit).limit(2);
+
+[1, 2, 3, 4, 5]=>elements
+[0, 1, 2, 3, 4] => index
+
+=>[1, 2]
+=>totalRows = Math.ceil( count(elements) / limit)
+=> totalRows = 1;
+
+
+[
+    {
+        id:1,
+        name:Thi,
+        key: "admin"
+    },
+     {
+        id:1,
+        name:Thi ne,
+        key: "admin1",
+    }
+]
+
+=> name = findName =>
+-case 1: tim khong thay id
+    + khong tim thay id
+-case 2: tim thay id
+    +id chinh no
+    +id da trung
+
+if(findName && requestId !== id){
+    return {
+        message:"Name no ton tai trong he thong",
+    }
+}
+
+=>findKey
+-case 1: tim khong thay id
+    + khong tim thay id
+-case 2: tim thay id
+    +id chinh no
+    +id da trung
+
+if(findKey && requestId !== id){
+    return {
+        message:"Key no ton tai trong he thong",
+    }
+}

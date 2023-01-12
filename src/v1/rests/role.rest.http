@@ -1,0 +1,39 @@
+
+@url = http://localhost:5000/api/v1/role
+
+###Get all role
+
+Get {{url}}?limit=3&page=1
+
+###Get by id
+
+Get {{url}}/63c02b529c4b9f9692bb0f0e
+
+### get get-role-id-gte-5
+Get {{url}}/get-role-id-gte-5
+
+### create role
+Post {{url}}
+Content-Type: application/json
+
+{
+    "name":"Quan tri vien 1",
+    "key": "ADMIN 1"
+}
+
+### update role
+Patch {{url}}/63bffa4689e2d8ca7541d2fe
+Content-Type: application/json
+
+{
+    "name":"Quan tri vien 3",
+    "key": "ADMIN 3"
+}
+
+###delete
+
+DELETE {{url}}/63c02b529c4b9f9692bb0f0e
+
+###delete vinh vien
+
+DELETE {{url}}/force/63c02b529c4b9f9692bb0f0e
