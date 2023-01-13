@@ -1,0 +1,15 @@
+@url = http://localhost:5000/api/v1/auth
+
+###sign up
+
+POST {{url}}/sign-up
+Content-Type: application/json
+
+{
+    "email":"camthi010501@gmail.com",
+    "password": "sdfsfesdefe"
+}
+
+### Verify account
+GET {{url}}/verify/camthi010501@gmail.com/$2b$10$q8H9NH1QFdFcr2Nu.JeuC.gFVISkH69ZckIZXMbZK3K6oSkXM8rwe
+

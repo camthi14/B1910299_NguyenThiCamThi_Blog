@@ -47,7 +47,7 @@ class RoleService extends ParentService {
       })
       .exec();
 
-    if (findName && findName._id !== id) {
+    if (findName && findName._id.toString() !== id) {
       return {
         errors: {
           message: "Name da ton tai",
@@ -63,7 +63,7 @@ class RoleService extends ParentService {
       })
       .exec();
 
-    if (findKey && findKey._id !== id) {
+    if (findKey && findKey._id.toString() !== id) {
       return {
         errors: {
           message: "Key da ton tai",
