@@ -26,9 +26,10 @@ function validateEmail(email) {
   });
 }
 
-async function sendEmailVerifyAccount(dataSend) {
+async function sendEmailVerifyAccount(dataSend, options) {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
+    service: "gmail",
     port: 587,
     auth: {
       user: process.env.EMAIL_APP_USERNAME,
@@ -40,8 +41,8 @@ async function sendEmailVerifyAccount(dataSend) {
     const response = await transporter.sendMail({
       from: `"Website review blog" < ${process.env.EMAIL_APP_USERNAME} >`,
       to: dataSend.sendToEmail,
-      subject: "Xac thuc tai khoan",
-      html: handleHtmlLang(dataSend),
+      subject: options.subject,
+      html: options.handleHtmlLang,
     });
 
     if (response) {

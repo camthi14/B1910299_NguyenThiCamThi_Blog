@@ -5,35 +5,51 @@ class ParentService {
     this.model = model;
   }
 
-  getAll = async ({
-    limit = 5,
-    page = 1,
-    selectField = "",
-    populate = { path: "", select: "" },
-  }) => {
+  getAll = async (filters = {}) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const _model = this.model;
+        const page = parseInt(filters.page) || 1;
+        const limit = parseInt(filters.limit) || 5;
+        const skip = (page - 1) * limit;
 
-        if (limit === 0 && page === 0) {
-          return resolve({
-            elements: await _model.find(),
-            errors: null,
-            status: 200,
-          });
+        let options = { is_delete: false };
+        let sort = filters.sort || "_id";
+        let sortBy = {};
+
+        filters.sort ? (sort = filters.sort.split(",")) : (sort = [sort]);
+        // * ["sort" , "desc"] || ["_id"]
+
+        sort[1] ? (sortBy[sort[0]] = sort[1]) : (sortBy[sort[0]] = "asc");
+        // * {sort: "desc"} || _id: "asc"
+
+        if (filters.search && filters.field) {
+          options = {
+            is_delete: false,
+            [filters.field]: { $regex: filters.search, $options: "i" },
+          };
         }
 
-        console.log(populate);
+        const data = await this.model
+          .find(options)
+          .select(filters.selectField)
+          .limit(limit)
+          .skip(skip)
+          .sort(sortBy);
 
-        if (!populate.path && !populate.select) {
-          return resolve(
-            await this.#getAllNotPopulate({ limit, page, selectField })
-          );
-        }
+        const total = await this.model.countDocuments(options);
 
-        resolve(
-          await this.#getAllPopulate({ limit, page, selectField, populate })
-        );
+        resolve({
+          elements: data,
+          errors: null,
+          status: 200,
+          meta: {
+            pagination: {
+              page,
+              limit,
+              totalRows: Math.ceil(total / limit),
+            },
+          },
+        });
       } catch (error) {
         reject(error);
       }
@@ -142,97 +158,6 @@ class ParentService {
 
   deleteForce = async (id) => {
     return await this.delete({ id, isDelete: true });
-  };
-  /**
-   * Lay du lieu khong co ref
-   * @param {limit = 5, page = 1, selectField} param0
-   * @returns
-   */
-
-  #getAllNotPopulate = ({ limit = 5, page = 1, selectField }) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _model = this.model;
-        const skip = (page - 1) * limit;
-
-        await _model
-          .find({ is_delete: false })
-          .select(selectField)
-          .limit(limit)
-          .skip(skip)
-          .exec((error, response) => {
-            if (error) {
-              reject(error);
-            }
-
-            _model.count().exec((error, count) => {
-              if (error) {
-                reject(error);
-              }
-              resolve({
-                elements: response,
-                errors: null,
-                status: 200,
-                meta: {
-                  pagination: {
-                    page,
-                    limit,
-                    totalRow: Math.ceil(count / limit),
-                  },
-                },
-              });
-            });
-          });
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-
-  /**
-   * Lay du lieu  co ref
-   * @param {limit = 5, page = 1, selectField, populate} param0
-   * @returns
-   */
-  #getAllPopulate = ({ limit = 5, page = 1, selectField, populate }) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const _model = this.model;
-        const skip = (page - 1) * limit;
-
-        await _model
-          .find({ is_delete: false })
-          .select(selectField)
-          .populate(populate)
-          .limit(limit)
-          .skip(skip)
-          .exec((error, response) => {
-            if (error) {
-              reject(error);
-            }
-
-            _model.count().exec((error, count) => {
-              if (error) {
-                reject(error);
-              }
-              resolve({
-                elements: response,
-                errors: null,
-                status: 200,
-                meta: {
-                  pagination: {
-                    page,
-                    limit,
-                    totalRow: Math.ceil(count / limit),
-                  },
-                },
-              });
-            });
-          });
-      } catch (error) {
-        reject(error);
-      }
-    });
   };
 }
 

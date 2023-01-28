@@ -2,7 +2,7 @@
 
 ###Get all user
 
-GET {{url}}?limit=6&page=1
+GET {{url}}?sort=email,desc&search=thine2&field=email
 
 ###Get by id
 
@@ -14,27 +14,25 @@ POST {{url}}
 Content-Type: application/json
 
 {
-    "email":"thine1@gmail.com",
-    "password":"thine1",
-    "roleId": "63c10827653e521d1b78993d"
+    "email":"thine13@gmail.com",
+    "password":"thine13"
 }
 
 ###update user
 
-PATCH {{url}}/63c108fe653e521d1b789948
+PATCH {{url}}/63d495b13f4b290a06c17e80
 Content-Type: application/json
 
 {
-    "email":"thine1@gmail.com",
-    "roleId": "63c10827653e521d1b78993d",
-    "full_name": "thine1"
+    "email":"thine2@gmail.com",
+    "full_name": "thine2"
 }
 
 ###change password user
 
-PATCH {{url}}/change-password/63c108fe653e521d1b789948
+PATCH {{url}}/63d495b13f4b290a06c17e80
 Content-Type: application/json
 
 {
-    "password": "thine1"
+    "password": "thine2"
 }

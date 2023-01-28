@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const error_handle_middleware = require("./v1/middlewares/error_handle_middleware");
 const initialRouter = require("./v1/routes");
+const cookieParser = require("cookie-parser");
 const { OPTION_CORS } = require("./v1/utils/option_cors");
 
 // init db mongo
@@ -14,6 +15,7 @@ app.use(helmet());
 app.use(morgan("combined"));
 app.use(cors(OPTION_CORS));
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   express.urlencoded({
     extended: true,

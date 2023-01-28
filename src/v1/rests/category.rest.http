@@ -1,0 +1,41 @@
+
+@url = http://localhost:5000/api/v1/category
+
+###Get all category
+
+Get {{url}}?limit=3&page=1
+
+###Get by id
+
+Get {{url}}/63c10827653e521d1b78993d
+
+### get get-role-id-gte-5
+Get {{url}}/get-role-id-gte-5
+
+### create category
+Post {{url}}
+Content-Type: application/json
+
+{
+    "name":"Cong nghe2",
+    "slug": "cong_nghe2",
+    "level": 1,
+    "parent_id": 1
+}
+
+### update role
+Patch {{url}}/63c10827653e521d1b78993d
+Content-Type: application/json
+
+{
+    "name":"Quan tri vien 2",
+    "key": "ADMIN 3"
+}
+
+###delete
+
+DELETE {{url}}/63c02b529c4b9f9692bb0f0e
+
+###delete vinh vien
+
+DELETE {{url}}/force/63c02b529c4b9f9692bb0f0e

@@ -10,6 +10,39 @@ Content-Type: application/json
     "password": "sdfsfesdefe"
 }
 
+###sign in
+POST {{url}}/sign-in
+Content-Type: application/json
+
+{
+    "email":"camthi010501@gmail.com",
+    "password": "thikhung"
+}
+
+### changePassword
+POST {{url}}/forgot-password
+Content-Type: application/json
+
+{
+    "email":"camthi010501@gmail.com"
+}
+
+### changePassword
+POST {{url}}/forgot-password/camthi010501@gmail.com?token=$2b$10$KuwZwZhAsQSfWYQ5swFFBezwKVIH.HzoSv30HbHn9gMMkfquzARlO
+Content-Type: application/json
+
+{
+    "password":"thikhung"
+}
+
+### get current user
+GET {{url}}/sign-in
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYzYzFhNDY5ZWY5NzkyYzE1MTA0ODdmMyIsImVtYWlsIjoiY2FtdGhpMDEwNTAxQGdtYWlsLmNvbSIsImZ1bGxfbmFtZSI6IiIsInJvbGUiOiJVU0VSIiwiaW1hZ2UiOiIiLCJpc192ZXJpZmllZCI6dHJ1ZX0sImlhdCI6MTY3NDkxNTA4MCwiZXhwIjoxNjc0OTE1MTAwfQ.1uLrvYheObe-K-Qj04L0Mo8kAtv4KJg6vbKGUu56gm8
+
+
+### refresh token
+GET {{url}}/refresh-token
+
 ### Verify account
 GET {{url}}/verify/camthi010501@gmail.com/$2b$10$q8H9NH1QFdFcr2Nu.JeuC.gFVISkH69ZckIZXMbZK3K6oSkXM8rwe
 

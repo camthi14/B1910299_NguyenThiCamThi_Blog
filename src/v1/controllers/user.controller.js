@@ -13,10 +13,10 @@ class UserController extends ParentController {
     try {
       const data = req.body;
 
-      if (!data.email || !data.password || !data.roleId) {
+      if (!data.email || !data.password) {
         return next({
           status: 400,
-          message: "Thieu truong email, password hoac roleID",
+          message: "Thieu truong email, password",
         });
       }
       const response = await this.service.create({
@@ -33,18 +33,8 @@ class UserController extends ParentController {
 
   getAll = async (req, res, next) => {
     try {
-      let { limit, page } = req.query;
-      let response;
-
-      if (!limit && !page) {
-        response = await this.service.getAll({ limit: 0, page: 0 });
-      } else {
-        response = await this.service.getAll({
-          limit: +limit,
-          page: +page,
-          populate: { path: "roleId", select: "key name" },
-        });
-      }
+      const selectField = "role is_verified email full_name image";
+      const response = await this.service.getAll({ selectField, ...req.query });
 
       res.status(response.status).json(response);
     } catch (error) {
