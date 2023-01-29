@@ -1,0 +1,43 @@
+@url = http://localhost:5000/api/v1/post
+
+###Get all category
+
+Get {{url}}
+
+###Get by id
+
+Get {{url}}/63d6124be6507e18feeee20a
+
+### create category
+Post {{url}}
+Content-Type: application/json
+
+{
+    "title": "Test title 1",
+    "slug": "test-title 1",
+    "detail_text": "text detail test 1",
+    "detail_html":"text detail html 1",
+    "categoryId": "63c7c0ff8015cb65d7433c15",
+    "userId":"63c10834653e521d1b789940"
+}
+
+### update
+Patch {{url}}/63d6124be6507e18feeee20a
+Content-Type: application/json
+
+{
+   "title": "Test title",
+    "slug": "test-title",
+    "detail_text": "text detail test",
+    "detail_html":"text detail html",
+    "categoryId": "63c7c0ff8015cb65d7433c15",
+    "userId":"63c10834653e521d1b789940"
+}
+
+###delete
+
+DELETE {{url}}/63d6124be6507e18feeee20a
+
+###delete vinh vien
+
+DELETE {{url}}/force/63c02b529c4b9f9692bb0f0e

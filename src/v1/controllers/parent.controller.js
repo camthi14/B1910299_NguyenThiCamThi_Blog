@@ -13,6 +13,7 @@ class ParentController {
       next(error);
     }
   };
+
   getById = async (req, res, next) => {
     try {
       const response = await this.service.getById(req.params.id);
@@ -21,6 +22,7 @@ class ParentController {
       next(error);
     }
   };
+
   create = async (req, res, next) => {
     try {
       const response = await this.service.create();
@@ -29,17 +31,27 @@ class ParentController {
       next(error);
     }
   };
+
   update = async (req, res, next) => {
     try {
+      if (Object.keys(req.body).length === 0) {
+        return next({
+          message: "Thiếu nội dung",
+          status: 400,
+        });
+      }
+
       const response = await this.service.update({
         id: req.params.id,
         data: req.body,
       });
+
       res.status(response.status).json(response);
     } catch (error) {
       next(error);
     }
   };
+
   delete = async (req, res, next) => {
     try {
       const isDelete = req.query.isDelete;
@@ -58,6 +70,7 @@ class ParentController {
       next(error);
     }
   };
+
   deleteForce = async (req, res, next) => {
     try {
       const id = req.params.id;

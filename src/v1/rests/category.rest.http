@@ -3,11 +3,15 @@
 
 ###Get all category
 
-Get {{url}}?limit=3&page=1
+Get {{url}}
 
 ###Get by id
 
-Get {{url}}/63c10827653e521d1b78993d
+Get {{url}}/63d5e169d08aebe295d5e1af
+
+###Get parent id
+
+Get {{url}}/parent/63c7c0ff8015cb65d7433c15
 
 ### get get-role-id-gte-5
 Get {{url}}/get-role-id-gte-5
@@ -17,19 +21,19 @@ Post {{url}}
 Content-Type: application/json
 
 {
-    "name":"Cong nghe2",
-    "slug": "cong_nghe2",
-    "level": 1,
-    "parent_id": 1
+    "name":"Blockchain3",
+    "slug": "block-chain3",
+    "level": 2,
+    "parentId": "63c7c0ff8015cb65d7433c15"
 }
 
-### update role
-Patch {{url}}/63c10827653e521d1b78993d
+### update
+Patch {{url}}/63d5e169d08aebe295d5e1af
 Content-Type: application/json
 
 {
-    "name":"Quan tri vien 2",
-    "key": "ADMIN 3"
+   "name":"Blockchain1",
+    "slug": "block-chain1"
 }
 
 ###delete

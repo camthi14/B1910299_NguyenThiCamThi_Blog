@@ -2,7 +2,7 @@
 
 ###Get all user
 
-GET {{url}}?sort=email,desc&search=thine2&field=email
+GET {{url}}
 
 ###Get by id
 
