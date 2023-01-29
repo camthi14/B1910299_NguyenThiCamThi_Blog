@@ -1,29 +1,43 @@
+<script setup>
+import { useRoute } from "vue-router";
+import { markRaw, ref, watch } from "vue";
+
+const defaultLayout = "DefaultLayout";
+const route = useRoute();
+const layout = ref();
+
+watch(
+  () => route.meta?.layout,
+  async (metaLayout) => {
+    try {
+      let component;
+      if (metaLayout) {
+        component = await import(`./layouts/${metaLayout}.vue`);
+      } else {
+        component = await import(`./layouts/${defaultLayout}.vue`);
+      }
+
+      layout.value = markRaw(component?.default);
+    } catch (e) {
+      const component = await import(`./layouts/${defaultLayout}.vue`);
+      layout.value = markRaw(component);
+    }
+  },
+  { immediate: true }
+);
+
+console.log(layout);
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <component :is="layout">
+      <router-view />
+    </component>
+  </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
 nav a.router-link-exact-active {
   color: #42b983;
 }
