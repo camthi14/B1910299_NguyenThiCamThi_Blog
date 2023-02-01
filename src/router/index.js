@@ -4,6 +4,8 @@ import NotFoundView from "../views/NotFoundView.vue";
 import AboutView from "../views/AboutView.vue";
 import Dashboard from "../pages/manager/Dashboard.vue";
 import Category from "../pages/manager/Category.vue";
+import FormLogin from "../components/FormLogin.vue";
+import store from "@/store";
 
 const routes = [
   {
@@ -19,6 +21,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
+    component: FormLogin,
     meta: {
       layout: "LoginLayout",
     },
@@ -34,6 +37,7 @@ const routes = [
         component: Dashboard,
         meta: {
           layout: "ManagerLayout",
+          auth: true, //*Kiểm tra xem người dùng có đăng nhập chưa
         },
       },
       {
@@ -42,6 +46,7 @@ const routes = [
         component: Category,
         meta: {
           layout: "ManagerLayout",
+          auth: true,
         },
       },
     ],
@@ -63,6 +68,22 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, form, next) => {
+  const isLoggedIn = store.getters["auth/isLoggedIn"];
+  if (to.path !== "/login" && !isLoggedIn) {
+    next({
+      name: "login",
+    });
+  }
+
+  if (to.path === "/login" && isLoggedIn) {
+    next({
+      name: "dashboard",
+    });
+  }
+  next();
 });
 
 export default router;

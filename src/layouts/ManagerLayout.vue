@@ -1,9 +1,75 @@
+<script setup>
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import authApi from "../apis/authApi";
+
+const drawer = ref(null);
+const links = ref([
+  ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
+  ["mdi-send", "Category", "/manager/category"],
+]);
+const store = useStore();
+const router = useRouter();
+
+const user = computed(() =>
+  Object.keys(store.state.auth.user).length === 0 ? null : store.state.auth.user
+);
+
+store.dispatch("auth/getCurrentUserLogin").catch(async (error) => {
+  if (
+    error.response &&
+    error.response.data &&
+    error.response.data.errors &&
+    error.response.data.errors.message !== "jwt expired"
+  ) {
+    await handleLogout();
+  }
+});
+
+const handleLogout = async () => {
+  try {
+    const response = await authApi.signOut();
+
+    if (response) {
+      store.dispatch("auth/remove");
+      router.push("/login");
+    }
+  } catch (error) {
+    console.log("error handleLogout:::", error);
+    throw new Error(error.message);
+  }
+};
+</script>
+
 <template>
-  <div>
-    <nav>
-      <router-link to="/manager/category">Category</router-link> |
-      <router-link to="/manager/dashboard">Dashboard</router-link>
-    </nav>
-    <slot />
-  </div>
+  <v-app id="inspire">
+    <v-app-bar>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>Hello, {{ user && user.email }}</v-toolbar-title>
+
+      <v-btn variant="outlined" @click="handleLogout">Đăng xuất</v-btn>
+    </v-app-bar>
+
+    <v-navigation-drawer v-model="drawer" temporary>
+      <v-list-item v-for="[icon, text, to] in links" :key="icon" link>
+        <template v-slot:prepend>
+          <v-icon>{{ icon }}</v-icon>
+        </template>
+
+        <router-link :to="to">
+          <v-list-item-title> {{ text }} </v-list-item-title>
+        </router-link>
+      </v-list-item>
+    </v-navigation-drawer>
+
+    <v-main class="bg-grey-lighten-2">
+      <v-container>
+        <v-row>
+          <slot />
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>

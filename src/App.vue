@@ -25,8 +25,6 @@ watch(
   },
   { immediate: true }
 );
-
-console.log(layout);
 </script>
 
 <template>

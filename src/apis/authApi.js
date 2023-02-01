@@ -9,7 +9,7 @@ const authApi = {
   signIn: async (data) => {
     return await instance.post(nameModel + "/sign-in", data);
   },
-  getCurrentUser: async ({ accessToken }) => {
+  getCurrentUser: async (accessToken) => {
     return await instance.get(nameModel + "/sign-in", {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -23,7 +23,7 @@ const authApi = {
     return await instance.post(nameModel + "/forgot-password", data);
   },
   refreshToken: async () => {
-    return await instance.get(nameModel + "refresh-Token");
+    return await instance.get(nameModel + "/refresh-token");
   },
 };
 export default authApi;
