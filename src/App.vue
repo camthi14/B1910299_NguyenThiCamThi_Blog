@@ -11,6 +11,7 @@ watch(
   async (metaLayout) => {
     try {
       let component;
+
       if (metaLayout) {
         component = await import(`./layouts/${metaLayout}.vue`);
       } else {
@@ -19,7 +20,7 @@ watch(
 
       layout.value = markRaw(component?.default);
     } catch (e) {
-      const component = await import(`./layouts/${defaultLayout}.vue`);
+      let component = await import(`./layouts/${defaultLayout}.vue`);
       layout.value = markRaw(component);
     }
   },

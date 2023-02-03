@@ -11,6 +11,11 @@ const links = ref([
 ]);
 const store = useStore();
 const router = useRouter();
+const theme = ref(localStorage.getItem("theme") || "light");
+function onClick() {
+  theme.value = theme.value === "light" ? "dark" : "light";
+  localStorage.setItem("theme", theme.value);
+}
 
 const user = computed(() =>
   Object.keys(store.state.auth.user).length === 0 ? null : store.state.auth.user
@@ -43,11 +48,20 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" :theme="theme">
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Hello, {{ user && user.email }}</v-toolbar-title>
+
+      <v-btn
+        :prepend-icon="
+          theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+        "
+        @click="onClick"
+      >
+        Toggle Theme
+      </v-btn>
 
       <v-btn variant="outlined" @click="handleLogout">Đăng xuất</v-btn>
     </v-app-bar>
@@ -58,13 +72,13 @@ const handleLogout = async () => {
           <v-icon>{{ icon }}</v-icon>
         </template>
 
-        <router-link :to="to">
+        <router-link :to="to" class="text-decoration-none">
           <v-list-item-title> {{ text }} </v-list-item-title>
         </router-link>
       </v-list-item>
     </v-navigation-drawer>
 
-    <v-main class="bg-grey-lighten-2">
+    <v-main>
       <v-container>
         <v-row>
           <slot />
