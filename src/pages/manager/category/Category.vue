@@ -1,20 +1,28 @@
 <script setup>
 import MenuList from "../../../components/manager/MenuList.vue";
 import { useStore } from "vuex";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import categoryApi from "../../../apis/categoryApi";
 
 const store = useStore();
 const categories = computed(() => store.state.category.categories);
 const isLoading = computed(() => store.state.category.isLoading);
+const filters = computed(() => store.state.category.filters);
+const pagination = computed(() => store.state.category.pagination);
 const selected = ref();
+const dialog = ref(false);
+const back = ref(false);
 
 onMounted(() => {
-  store.dispatch("category/fetchAllCategory");
+  store.dispatch("category/fetchAllCategory", filters.value);
 });
 
-const page = 1;
-const dialog = ref(false);
+watch(
+  () => store.state.category.filters,
+  (filters) => {
+    store.dispatch("category/fetchAllCategory", filters);
+  }
+);
 
 const handleOpenDelete = (category) => {
   selected.value = category;
@@ -25,20 +33,52 @@ const handleDelete = async (category) => {
   try {
     dialog.value = false;
     const response = await categoryApi.delete({ id: category._id });
+
     if (response) {
-      store.dispatch("category/fetchAllCategory");
+      const payload = {
+        text: "Xoá danh mục thành công!",
+        color: "success",
+        open: true,
+      };
+      store.dispatch("toast/startToast", payload);
+      store.dispatch("category/fetchAllCategory", {
+        ...filters.value,
+        page: 1,
+      });
     }
   } catch (error) {
     console.log("HandleDelete error:::", error);
   }
 };
 
-const items = [
-  { title: "Thêm danh mục con", icon: "mdi-clock" },
-  { title: "Hiển thị danh mục con", icon: "mdi-account" },
-  { title: "Sửa danh mục", icon: "mdi-flag" },
-  { title: "Xoá danh mục", icon: "mdi-flag" },
-];
+// const items = [
+//   { title: "Thêm danh mục con", icon: "mdi-clock" },
+//   { title: "Hiển thị danh mục con", icon: "mdi-account" },
+//   { title: "Sửa danh mục", icon: "mdi-flag" },
+//   { title: "Xoá danh mục", icon: "mdi-flag" },
+// ];
+
+const changePage = (newPage) => {
+  store.dispatch("category/changeFilter", { ...filters.value, page: newPage });
+};
+
+const handleShowChildren = (category) => {
+  back.value = true;
+  store.dispatch("category/changeFilter", {
+    ...filters.value,
+    page: 1,
+    where: "parent_id," + category._id,
+  });
+};
+
+const handleBack = () => {
+  back.value = false;
+  store.dispatch("category/changeFilter", {
+    ...filters.value,
+    page: 1,
+    where: "level,1",
+  });
+};
 </script>
 
 <template>
@@ -51,6 +91,8 @@ const items = [
           <v-btn>Thêm danh mục</v-btn>
         </router-link>
       </div>
+
+      <v-btn v-if="back" @click="handleBack" class="mb-5">Quay trở lại</v-btn>
 
       <div class="position-relative">
         <v-progress-linear
@@ -77,17 +119,11 @@ const items = [
               <td>{{ item.slug }}</td>
               <td>{{ item.level }}</td>
               <td>
-                <v-btn>Thêm danh mục con</v-btn>
-                <v-btn color="blue">Hiện danh mục con</v-btn>
-                <router-link
-                  :to="`/manager/category/update/${item._id}`"
-                  class="text-decoration-none"
-                >
-                  <v-btn color="primary">Sửa danh mục </v-btn>
-                </router-link>
-                <v-btn color="error" @click="handleOpenDelete(item)"
-                  >Xoá danh mục
-                </v-btn>
+                <menu-list
+                  :selected="item"
+                  :onOpenDelete="handleOpenDelete"
+                  :onShowChildren="handleShowChildren"
+                />
               </td>
             </tr>
           </tbody>
@@ -119,7 +155,11 @@ const items = [
       </v-row>
 
       <div class="text-center mt-5">
-        <v-pagination v-model="page" :length="6"></v-pagination>
+        <v-pagination
+          v-model="pagination.page"
+          :length="pagination.totalRows"
+          @update:modelValue="changePage"
+        ></v-pagination>
       </div>
     </v-col>
   </v-row>

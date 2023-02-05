@@ -2,9 +2,15 @@
 import { defineProps } from "vue";
 
 defineProps({
-  items: {
+  selected: {
     type: [Object],
     required: true,
+  },
+  onOpenDelete: {
+    type: Function,
+  },
+  onShowChildren: {
+    type: Function,
   },
 });
 </script>
@@ -18,18 +24,52 @@ defineProps({
     </template>
 
     <v-list density="compact">
+      <v-list-item active-color="primary" variant="plain" class="cursor-point">
+        <router-link
+          :to="`/manager/category/add/children/${selected._id}`"
+          class="text-decoration-none d-flex text-error"
+        >
+          <v-icon icon="mdi-plus-circle-outline" class="mr-2"></v-icon>
+          <v-list-item-title v-text="`Thêm danh mục con`"></v-list-item-title>
+        </router-link>
+      </v-list-item>
+
       <v-list-item
-        v-for="(item, i) in items"
-        :key="i"
-        :value="item"
         active-color="primary"
         variant="plain"
+        class="cursor-point text-success"
       >
-        <template v-slot:prepend>
-          <v-icon :icon="item.icon"></v-icon>
-        </template>
+        <div class="d-flex">
+          <v-icon icon="mdi-clipboard-text" class="mr-2"></v-icon>
+          <v-list-item-title
+            v-text="`Hiện danh mục con`"
+            @click="onShowChildren(selected)"
+          ></v-list-item-title>
+        </div>
+      </v-list-item>
 
-        <v-list-item-title v-text="item.title"></v-list-item-title>
+      <v-list-item
+        active-color="primary"
+        variant="plain"
+        class="cursor-point text-blue"
+      >
+        <router-link
+          :to="`/manager/category/update/${selected._id}`"
+          class="text-decoration-none d-flex"
+        >
+          <v-icon icon="mdi-pencil-box-outline" class="mr-2"></v-icon>
+          <v-list-item-title v-text="`Sửa danh mục`"></v-list-item-title>
+        </router-link>
+      </v-list-item>
+
+      <v-list-item active-color="primary" variant="plain" class="cursor-point">
+        <div class="d-flex">
+          <v-icon icon="mdi-delete" class="mr-2"></v-icon>
+          <v-list-item-title
+            v-text="`Xoá danh mục`"
+            @click="onOpenDelete(selected)"
+          ></v-list-item-title>
+        </div>
       </v-list-item>
     </v-list>
   </v-menu>

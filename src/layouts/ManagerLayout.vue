@@ -7,7 +7,7 @@ import authApi from "../apis/authApi";
 const drawer = ref(null);
 const links = ref([
   ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
-  ["mdi-send", "Category", "/manager/category"],
+  ["mdi-clipboard-text", "Category", "/manager/category"],
 ]);
 const store = useStore();
 const router = useRouter();
@@ -68,11 +68,8 @@ const handleLogout = async () => {
 
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list-item v-for="[icon, text, to] in links" :key="icon" link>
-        <template v-slot:prepend>
-          <v-icon>{{ icon }}</v-icon>
-        </template>
-
-        <router-link :to="to" class="text-decoration-none">
+        <router-link :to="to" class="text-decoration-none d-flex">
+          <v-icon class="mr-3">{{ icon }}</v-icon>
           <v-list-item-title> {{ text }} </v-list-item-title>
         </router-link>
       </v-list-item>

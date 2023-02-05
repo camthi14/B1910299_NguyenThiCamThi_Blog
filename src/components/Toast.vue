@@ -46,7 +46,7 @@ export default defineComponent({
 
     <template v-slot:actions>
       <v-btn :color="blue" variant="text" @click="snackbar = false">
-        Close
+        <v-icon icon="mdi-close"></v-icon>
       </v-btn>
     </template>
   </v-snackbar>

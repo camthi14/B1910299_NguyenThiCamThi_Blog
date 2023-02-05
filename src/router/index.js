@@ -68,6 +68,18 @@ const routes = [
             },
           },
           {
+            path: "add/children/:parentId",
+            name: "add-category-children",
+            component: () =>
+              import(
+                /* webpackChunkName: "CategoryAddEdit" */ "../pages/manager/category/CategoryAddEdit.vue"
+              ),
+            meta: {
+              layout: "ManagerLayout",
+              auth: true,
+            },
+          },
+          {
             path: "update/:categoryId",
             name: "update-category",
             component: () =>

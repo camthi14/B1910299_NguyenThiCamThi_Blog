@@ -13,6 +13,10 @@ export default defineComponent({
       default: {},
       // reqiured: true,
     },
+    parent: {
+      type: Object,
+      default: {},
+    },
   },
   setup(props) {
     const store = useStore();
@@ -43,20 +47,27 @@ export default defineComponent({
 
     const handleSubmit = async () => {
       if (Object.keys(errors).length === 0) {
-        const data = {
+        //khi thay đổi giá trị thì sử dụng let
+        let data = {
           name: name.value,
           slug: slug.value,
         };
         try {
           let response;
-          const selectedLength = Object.keys(props.selected).length;
+          const selectedEmpty = Object.keys(props.selected).length === 0;
+          const parentEmpty = Object.keys(props.parent).length === 0;
 
           //isModeUpdate là object không thể sử dụng ! để so sánh
-          if (selectedLength === 0) {
-            console.log("ADD");
+          if (selectedEmpty) {
+            if (!parentEmpty) {
+              data = {
+                ...data,
+                level: +props.parent.level + 1,
+                parentId: props.parent._id,
+              };
+            }
             response = await categoryApi.create(data);
           } else {
-            console.log("Edit");
             response = await categoryApi.update({
               id: props.selected._id,
               data,
@@ -65,9 +76,9 @@ export default defineComponent({
 
           if (response && response.elements) {
             const payload = {
-              text: `${
-                selectedLength === 0 ? "Thêm" : "Cập nhật"
-              } danh mục thành công!`,
+              text: `${selectedEmpty ? "Thêm" : "Cập nhật"} danh mục ${
+                parentEmpty ? "con" : ""
+              }thành công!`,
               color: "success",
               open: true,
             };
@@ -88,6 +99,7 @@ export default defineComponent({
       slug,
       max,
       errorMessage,
+      ruleName,
     };
   },
 });
