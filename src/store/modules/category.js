@@ -1,4 +1,5 @@
 import categoryApi from "@/apis/categoryApi";
+import toast from "./toast";
 
 const state = () => ({
   categories: [],
@@ -21,7 +22,7 @@ const mutations = {
 };
 
 const actions = {
-  fetchAllCategory: async ({ commit }, filters) => {
+  fetchAllCategory: async ({ dispatch, commit }, filters) => {
     try {
       commit("fetchAllStart");
 
@@ -32,7 +33,15 @@ const actions = {
       }
     } catch (error) {
       console.log("fetchAllCategory error:::", error);
-      commit("fetchAllFail", error.message);
+      if (!error.response) {
+        const payload = {
+          text: error.message,
+          color: "error",
+          open: true,
+        };
+        dispatch("toast/startToast", payload, { root: true });
+        commit("fetchAllFail", error.message);
+      }
     }
   },
 };

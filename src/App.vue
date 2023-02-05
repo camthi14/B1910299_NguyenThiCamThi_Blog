@@ -1,10 +1,26 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { markRaw, ref, watch } from "vue";
+import { computed, markRaw, onMounted, ref, watch } from "vue";
+import Toast from "./components/Toast.vue";
+import { useStore } from "vuex";
 
 const defaultLayout = "DefaultLayout";
 const route = useRoute();
 const layout = ref();
+const store = useStore();
+
+const text = computed(() => store.state.toast.text);
+const color = computed(() => store.state.toast.color);
+const open = computed(() => store.state.toast.open);
+
+watch(
+  () => store.state.toast.open,
+  (open) => {
+    if (open) {
+      setTimeout(() => store.dispatch("toast/saveOpen", { open: false }), 1500);
+    }
+  }
+);
 
 watch(
   () => route.meta?.layout,
@@ -32,6 +48,8 @@ watch(
   <div>
     <component :is="layout">
       <router-view />
+
+      <toast v-if="open" :open="open" :color="color" :text="text" />
     </component>
   </div>
 </template>

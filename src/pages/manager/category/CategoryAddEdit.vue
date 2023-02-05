@@ -37,9 +37,10 @@ onMounted(() => {
       </h1>
       <div>
         <FormCategoryAddEdit
-          :isModeUpdate="isModeUpdate"
+          v-if="isModeUpdate"
           :selected="categorySelected ? categorySelected : {}"
         />
+        <FormCategoryAddEdit v-else />
       </div>
     </v-col>
   </v-row>

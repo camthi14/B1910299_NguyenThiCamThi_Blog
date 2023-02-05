@@ -52,36 +52,47 @@ const items = [
         </router-link>
       </div>
 
-      <v-table>
-        <thead>
-          <tr>
-            <th class="text-left">Tên danh mục</th>
-            <th class="text-left">Slug</th>
-            <th class="text-left">Level</th>
-            <th class="text-left">Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in categories" :key="item.name">
-            <td>{{ item.name }}</td>
-            <td>{{ item.slug }}</td>
-            <td>{{ item.level }}</td>
-            <td>
-              <v-btn>Thêm danh mục con</v-btn>
-              <v-btn color="blue">Hiện danh mục con</v-btn>
-              <router-link
-                :to="`/manager/category/update/${item._id}`"
-                class="text-decoration-none"
-              >
-                <v-btn color="primary">Sửa danh mục </v-btn>
-              </router-link>
-              <v-btn color="error" @click="handleOpenDelete(item)"
-                >Xoá danh mục
-              </v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
+      <div class="position-relative">
+        <v-progress-linear
+          v-if="isLoading"
+          color="green"
+          indeterminate
+          rounded
+          height="3"
+          class="position-absolute"
+        />
+
+        <v-table>
+          <thead>
+            <tr>
+              <th class="text-left">Tên danh mục</th>
+              <th class="text-left">Slug</th>
+              <th class="text-left">Level</th>
+              <th class="text-left">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in categories" :key="item.name">
+              <td>{{ item.name }}</td>
+              <td>{{ item.slug }}</td>
+              <td>{{ item.level }}</td>
+              <td>
+                <v-btn>Thêm danh mục con</v-btn>
+                <v-btn color="blue">Hiện danh mục con</v-btn>
+                <router-link
+                  :to="`/manager/category/update/${item._id}`"
+                  class="text-decoration-none"
+                >
+                  <v-btn color="primary">Sửa danh mục </v-btn>
+                </router-link>
+                <v-btn color="error" @click="handleOpenDelete(item)"
+                  >Xoá danh mục
+                </v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
 
       <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="50%">
