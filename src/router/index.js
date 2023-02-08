@@ -4,107 +4,170 @@ import store from "@/store";
 const routes = [
   {
     path: "/",
-    name: "home",
     component: () =>
-      import(/* webpackChunkName: "HomeView" */ "../views/HomeView.vue"),
-  },
-  {
-    path: "/about",
-    name: "about",
-    component: () =>
-      import(/* webpackChunkName: "AboutView" */ "../views/AboutView.vue"),
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () =>
-      import(/* webpackChunkName: "FormLogin" */ "../components/FormLogin.vue"),
-    meta: {
-      layout: "LoginLayout",
-    },
-  },
-  {
-    path: "/manager",
-    name: "manager",
-    redirect: { name: "dashboard" },
+      import(
+        /* webpackChunkName: "DefaultLayout" */ "../layouts/DefaultLayout.vue"
+      ),
+
     children: [
       {
-        path: "dashboard",
-        name: "dashboard",
+        path: "",
+        name: "home",
         component: () =>
-          import(
-            /* webpackChunkName: "Dashboard" */ "../pages/manager/Dashboard.vue"
-          ),
-        meta: {
-          layout: "ManagerLayout",
-          auth: true, //*Kiểm tra xem người dùng có đăng nhập chưa
-        },
+          import(/* webpackChunkName: "HomeView" */ "../views/HomeView.vue"),
       },
       {
-        path: "category",
+        path: "about",
+        name: "about",
+        component: () =>
+          import(/* webpackChunkName: "AboutView" */ "../views/AboutView.vue"),
+      },
+      {
+        path: "login",
+        component: () =>
+          import(
+            /* webpackChunkName: "LoginLayout" */ "../layouts/LoginLayout.vue"
+          ),
+
         children: [
           {
             path: "",
-            name: "category",
+            name: "login",
             component: () =>
               import(
-                /* webpackChunkName: "Category" */ "../pages/manager/category/Category.vue"
+                /* webpackChunkName: "FormLogin" */ "../components/FormLogin.vue"
+              ),
+          },
+        ],
+      },
+      {
+        path: "manager",
+        redirect: { name: "dashboard" },
+        component: () =>
+          import(
+            /* webpackChunkName: "ManagerLayout" */ "../layouts/ManagerLayout.vue"
+          ),
+        children: [
+          {
+            path: "dashboard",
+            name: "dashboard",
+            component: () =>
+              import(
+                /* webpackChunkName: "Dashboard" */ "../pages/manager/Dashboard.vue"
               ),
             meta: {
-              layout: "ManagerLayout",
-              auth: true,
+              auth: true, //*Kiểm tra xem người dùng có đăng nhập chưa
             },
           },
           {
-            path: "add",
-            name: "add-category",
-            component: () =>
-              import(
-                /* webpackChunkName: "CategoryAddEdit" */ "../pages/manager/category/CategoryAddEdit.vue"
-              ),
-            meta: {
-              layout: "ManagerLayout",
-              auth: true,
-            },
+            path: "category",
+            children: [
+              {
+                path: "",
+                name: "category",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "Category" */ "../pages/manager/category/Category.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+              {
+                path: "add",
+                name: "add-category",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "CategoryAdd" */ "../pages/manager/category/CategoryAddEdit.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+              {
+                path: "add/children/:parentId",
+                name: "add-category-children",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "CategoryAddChildren" */ "../pages/manager/category/CategoryAddEdit.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+              {
+                path: "update/:categoryId",
+                name: "update-category",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "CategoryEdit" */ "../pages/manager/category/CategoryAddEdit.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+            ],
           },
           {
-            path: "add/children/:parentId",
-            name: "add-category-children",
-            component: () =>
-              import(
-                /* webpackChunkName: "CategoryAddEdit" */ "../pages/manager/category/CategoryAddEdit.vue"
-              ),
-            meta: {
-              layout: "ManagerLayout",
-              auth: true,
-            },
-          },
-          {
-            path: "update/:categoryId",
-            name: "update-category",
-            component: () =>
-              import(
-                /* webpackChunkName: "CategoryAddEdit" */ "../pages/manager/category/CategoryAddEdit.vue"
-              ),
-            meta: {
-              layout: "ManagerLayout",
-              auth: true,
-            },
+            path: "post",
+            children: [
+              {
+                path: "",
+                name: "post",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "Post" */ "../pages/manager/post/Post.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+              {
+                path: "add",
+                name: "add-post",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "PostAdd" */ "../pages/manager/post/PostAddEdit.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+              {
+                path: "update/:postId",
+                name: "update-post",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "PostUpadte" */ "../pages/manager/post/PostAddEdit.vue"
+                  ),
+                meta: {
+                  auth: true,
+                },
+              },
+            ],
           },
         ],
       },
     ],
   },
+
   {
     path: "/404",
-    name: "notfound",
     component: () =>
       import(
-        /* webpackChunkName: "NotFoundView" */ "../views/NotFoundView.vue"
+        /* webpackChunkName: "NotFoundLayout" */ "../layouts/NotFoundLayout.vue"
       ),
-    meta: {
-      layout: "NotFoundLayout",
-    },
+
+    children: [
+      {
+        path: "",
+        name: "notfound",
+        component: () =>
+          import(
+            /* webpackChunkName: "NotFoundView" */ "../views/NotFoundView.vue"
+          ),
+      },
+    ],
   },
   {
     path: "/:pathMatch(.*)*",
@@ -118,17 +181,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to, form, next) => {
-  const isLoggedIn = store.getters["auth/isLoggedIn"];
-  if (to.path !== "/login" && !isLoggedIn) {
-    next({
-      name: "login",
-    });
-  }
+  if (to.meta?.auth) {
+    const isLoggedIn = store.getters["auth/isLoggedIn"];
+    if (to.path !== "/login" && !isLoggedIn) {
+      next({
+        name: "login",
+      });
+    }
 
-  if (to.path === "/login" && isLoggedIn) {
-    next({
-      name: "dashboard",
-    });
+    if (to.path === "/login" && isLoggedIn) {
+      next({
+        name: "dashboard",
+      });
+    }
   }
   next();
 });

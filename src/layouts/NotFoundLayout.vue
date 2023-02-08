@@ -1,6 +1,3 @@
-<script setup>
-import NotFoundView from "../views/NotFoundView.vue";
-</script>
 <template>
-  <NotFoundView />
+  <router-view />
 </template>

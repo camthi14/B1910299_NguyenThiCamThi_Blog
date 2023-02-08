@@ -78,7 +78,7 @@ export default defineComponent({
             const payload = {
               text: `${selectedEmpty ? "Thêm" : "Cập nhật"} danh mục ${
                 parentEmpty ? "con" : ""
-              }thành công!`,
+              } thành công!`,
               color: "success",
               open: true,
             };

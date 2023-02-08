@@ -25,7 +25,7 @@ function onClick() {
       <v-container>
         <v-row>
           <v-col>
-            <slot />
+            <router-view />
           </v-col>
         </v-row>
       </v-container>

@@ -1,84 +1,103 @@
-<script setup>
+<script>
 import MenuList from "../../../components/manager/MenuList.vue";
 import { useStore } from "vuex";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import categoryApi from "../../../apis/categoryApi";
 
-const store = useStore();
-const categories = computed(() => store.state.category.categories);
-const isLoading = computed(() => store.state.category.isLoading);
-const filters = computed(() => store.state.category.filters);
-const pagination = computed(() => store.state.category.pagination);
-const selected = ref();
-const dialog = ref(false);
-const back = ref(false);
+export default defineComponent({
+  components: {
+    MenuList,
+  },
 
-onMounted(() => {
-  store.dispatch("category/fetchAllCategory", filters.value);
-});
+  setup() {
+    const store = useStore();
+    const categories = computed(() => store.state.category.categories);
+    const isLoading = computed(() => store.state.category.isLoading);
+    const filters = computed(() => store.state.category.filters);
+    const pagination = computed(() => store.state.category.pagination);
+    const selected = ref();
+    const dialog = ref(false);
+    const back = ref(false);
 
-watch(
-  () => store.state.category.filters,
-  (filters) => {
-    store.dispatch("category/fetchAllCategory", filters);
-  }
-);
+    onMounted(() => {
+      store.dispatch("category/fetchAllCategory", filters.value);
+    });
 
-const handleOpenDelete = (category) => {
-  selected.value = category;
-  dialog.value = true;
-};
+    watch(
+      () => store.state.category.filters,
+      (filters) => {
+        store.dispatch("category/fetchAllCategory", filters);
+      }
+    );
 
-const handleDelete = async (category) => {
-  try {
-    dialog.value = false;
-    const response = await categoryApi.delete({ id: category._id });
+    const handleOpenDelete = (category) => {
+      selected.value = category;
+      dialog.value = true;
+    };
 
-    if (response) {
-      const payload = {
-        text: "Xoá danh mục thành công!",
-        color: "success",
-        open: true,
-      };
-      store.dispatch("toast/startToast", payload);
-      store.dispatch("category/fetchAllCategory", {
+    const handleDelete = async (category) => {
+      try {
+        dialog.value = false;
+        const response = await categoryApi.delete({ id: category._id });
+
+        if (response) {
+          const payload = {
+            text: "Xoá danh mục thành công!",
+            color: "success",
+            open: true,
+          };
+          store.dispatch("toast/startToast", payload);
+          store.dispatch("category/fetchAllCategory", {
+            ...filters.value,
+            page: 1,
+          });
+        }
+      } catch (error) {
+        console.log("HandleDelete error:::", error);
+      }
+    };
+
+    const changePage = (newPage) => {
+      store.dispatch("category/changeFilter", {
+        ...filters.value,
+        page: newPage,
+      });
+    };
+
+    const handleShowChildren = (category) => {
+      back.value = true;
+      store.dispatch("category/changeFilter", {
         ...filters.value,
         page: 1,
+        where: "parent_id," + category._id,
       });
-    }
-  } catch (error) {
-    console.log("HandleDelete error:::", error);
-  }
-};
+    };
 
-// const items = [
-//   { title: "Thêm danh mục con", icon: "mdi-clock" },
-//   { title: "Hiển thị danh mục con", icon: "mdi-account" },
-//   { title: "Sửa danh mục", icon: "mdi-flag" },
-//   { title: "Xoá danh mục", icon: "mdi-flag" },
-// ];
+    const handleBack = () => {
+      back.value = false;
+      store.dispatch("category/changeFilter", {
+        ...filters.value,
+        page: 1,
+        where: "level,1",
+      });
+    };
 
-const changePage = (newPage) => {
-  store.dispatch("category/changeFilter", { ...filters.value, page: newPage });
-};
-
-const handleShowChildren = (category) => {
-  back.value = true;
-  store.dispatch("category/changeFilter", {
-    ...filters.value,
-    page: 1,
-    where: "parent_id," + category._id,
-  });
-};
-
-const handleBack = () => {
-  back.value = false;
-  store.dispatch("category/changeFilter", {
-    ...filters.value,
-    page: 1,
-    where: "level,1",
-  });
-};
+    return {
+      handleBack,
+      handleOpenDelete,
+      handleDelete,
+      handleShowChildren,
+      changePage,
+      categories,
+      isLoading,
+      filters,
+      pagination,
+      selected,
+      dialog,
+      back,
+    };
+  },
+});
 </script>
 
 <template>
@@ -119,7 +138,7 @@ const handleBack = () => {
               <td>{{ item.slug }}</td>
               <td>{{ item.level }}</td>
               <td>
-                <menu-list
+                <MenuList
                   :selected="item"
                   :onOpenDelete="handleOpenDelete"
                   :onShowChildren="handleShowChildren"

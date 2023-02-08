@@ -1,37 +1,53 @@
-<script setup>
-import { computed, onMounted, ref } from "vue";
+<script>
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import categoryApi from "../../../apis/categoryApi";
 import FormCategoryAddEdit from "../../../components/manager/category/FormCategoryAddEdit.vue";
 
-const route = useRoute();
-const params = route.params;
-const categorySelected = ref();
-const parentSelected = ref();
+export default defineComponent({
+  components: {
+    FormCategoryAddEdit,
+  },
 
-const isModeUpdate = computed(() => (params?.categoryId ? true : false));
-const isModeAddChildren = computed(() => (params?.parentId ? true : false));
+  setup() {
+    const route = useRoute();
+    const params = route.params;
+    const categorySelected = ref();
+    const parentSelected = ref();
 
-const getCategoryById = async (id) => {
-  try {
-    const response = await categoryApi.getById(id);
+    const isModeUpdate = computed(() => (params?.categoryId ? true : false));
+    const isModeAddChildren = computed(() => (params?.parentId ? true : false));
 
-    if (response && response.elements) {
-      return response.elements;
-    }
-  } catch (error) {
-    console.log("Error getCategoryById:::", error);
-  }
-};
+    const getCategoryById = async (id) => {
+      try {
+        const response = await categoryApi.getById(id);
 
-onMounted(async () => {
-  if (params?.categoryId) {
-    categorySelected.value = await getCategoryById(params.categoryId);
-  }
+        if (response && response.elements) {
+          return response.elements;
+        }
+      } catch (error) {
+        console.log("Error getCategoryById:::", error);
+      }
+    };
 
-  if (params?.parentId) {
-    parentSelected.value = await getCategoryById(params.parentId);
-  }
+    onMounted(async () => {
+      if (params?.categoryId) {
+        categorySelected.value = await getCategoryById(params.categoryId);
+      }
+
+      if (params?.parentId) {
+        parentSelected.value = await getCategoryById(params.parentId);
+      }
+    });
+    return {
+      getCategoryById,
+      isModeUpdate,
+      isModeAddChildren,
+      params,
+      categorySelected,
+      parentSelected,
+    };
+  },
 });
 </script>
 

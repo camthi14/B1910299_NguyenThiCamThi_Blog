@@ -1,50 +1,67 @@
-<script setup>
-import { computed, ref } from "vue";
+<script>
+import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import authApi from "../apis/authApi";
 
-const drawer = ref(null);
-const links = ref([
-  ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
-  ["mdi-clipboard-text", "Category", "/manager/category"],
-]);
-const store = useStore();
-const router = useRouter();
-const theme = ref(localStorage.getItem("theme") || "light");
-function onClick() {
-  theme.value = theme.value === "light" ? "dark" : "light";
-  localStorage.setItem("theme", theme.value);
-}
+export default defineComponent({
+  setup() {
+    const drawer = ref(null);
+    const links = ref([
+      ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
+      ["mdi-clipboard-text", "Category", "/manager/category"],
+      ["mdi-clipboard-text", "Post", "/manager/post"],
+    ]);
+    const store = useStore();
+    const router = useRouter();
+    const theme = ref(localStorage.getItem("theme") || "light");
 
-const user = computed(() =>
-  Object.keys(store.state.auth.user).length === 0 ? null : store.state.auth.user
-);
-
-store.dispatch("auth/getCurrentUserLogin").catch(async (error) => {
-  if (
-    error.response &&
-    error.response.data &&
-    error.response.data.errors &&
-    error.response.data.errors.message !== "jwt expired"
-  ) {
-    await handleLogout();
-  }
-});
-
-const handleLogout = async () => {
-  try {
-    const response = await authApi.signOut();
-
-    if (response) {
-      store.dispatch("auth/remove");
-      router.push("/login");
+    function onClick() {
+      theme.value = theme.value === "light" ? "dark" : "light";
+      localStorage.setItem("theme", theme.value);
     }
-  } catch (error) {
-    console.log("error handleLogout:::", error);
-    throw new Error(error.message);
-  }
-};
+
+    const user = computed(() =>
+      Object.keys(store.state.auth.user).length === 0
+        ? null
+        : store.state.auth.user
+    );
+
+    store.dispatch("auth/getCurrentUserLogin").catch(async (error) => {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.errors &&
+        error.response.data.errors.message !== "jwt expired"
+      ) {
+        await handleLogout();
+      }
+    });
+
+    const handleLogout = async () => {
+      try {
+        const response = await authApi.signOut();
+
+        if (response) {
+          store.dispatch("auth/remove");
+          router.push("/login");
+        }
+      } catch (error) {
+        console.log("error handleLogout:::", error);
+        throw new Error(error.message);
+      }
+    };
+
+    return {
+      onClick,
+      handleLogout,
+      theme,
+      drawer,
+      user,
+      links,
+    };
+  },
+});
 </script>
 
 <template>
@@ -78,7 +95,7 @@ const handleLogout = async () => {
     <v-main>
       <v-container>
         <v-row>
-          <slot />
+          <router-view />
         </v-row>
       </v-container>
     </v-main>

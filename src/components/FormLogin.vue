@@ -28,6 +28,13 @@ async function handleSubmit() {
       // console.log("check response login:::", response);
 
       if (response.elements) {
+        //Thông báo khi đăng nhập thành công
+        const payload = {
+          text: "Đăng nhập thành công!",
+          color: "success",
+          open: true,
+        };
+        store.dispatch("toast/startToast", payload);
         //Lưu accessToken vào store
         store.dispatch("auth/saveAccessToken", response.elements.accessToken);
 
