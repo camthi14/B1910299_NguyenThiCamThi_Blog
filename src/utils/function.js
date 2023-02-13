@@ -16,12 +16,9 @@ export function uploadImage(loader) {
 
             //*Call Api upload image to server
             const response = await uploadApi.image(file);
-            console.log(response);
 
             if (response) {
               const urlImage = `${process.env.VUE_APP_ENDPOINT_URL}/${response?.filename}`;
-              console.log(urlImage);
-              //* result {default: urlImage}
               resolve({ default: urlImage });
             }
           } catch (error) {

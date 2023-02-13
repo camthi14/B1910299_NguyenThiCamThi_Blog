@@ -14,6 +14,7 @@ export default defineComponent({
     const text = computed(() => store.state.toast.text);
     const color = computed(() => store.state.toast.color);
     const open = computed(() => store.state.toast.open);
+    const duration = computed(() => store.state.toast.timeout);
 
     watch(
       () => store.state.toast.open,
@@ -21,7 +22,7 @@ export default defineComponent({
         if (open) {
           setTimeout(
             () => store.dispatch("toast/saveOpen", { open: false }),
-            1500
+            duration.value + 5
           );
         }
       }

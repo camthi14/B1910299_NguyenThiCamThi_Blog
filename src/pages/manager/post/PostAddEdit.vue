@@ -18,14 +18,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-row>
-    <v-col>
-      <h1 class="text-center my-4">
-        {{ isModeAdd ? "Thêm" : "Cập nhật" }} bài viết
-      </h1>
-      <div>
-        <FormPostAddEdit :isModeAdd="isModeAdd" />
-      </div>
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row>
+      <v-col>
+        <h1 class="text-center my-4">
+          {{ isModeAdd ? "Thêm" : "Cập nhật" }} bài viết
+        </h1>
+      </v-col>
+    </v-row>
+    <div>
+      <FormPostAddEdit :isModeAdd="isModeAdd" />
+    </div>
+  </v-container>
 </template>

@@ -1,9 +1,38 @@
 <script>
-import { defineComponent } from "@vue/runtime-core";
+import { computed, defineComponent, onMounted } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
-    return {};
+    const store = useStore();
+    const posts = computed(() => store.state.post.posts);
+    const filters = computed(() => store.state.post.filters);
+    const pagination = computed(() => store.state.post.pagination);
+    const isLoading = computed(() => store.state.post.isLoading);
+    const URL = computed(() => process.env.VUE_APP_ENDPOINT_URL);
+
+    onMounted(() => {
+      store.dispatch("post/fetchAllPost", {
+        ...filters.value,
+        page: 1,
+        limit: 10,
+      });
+    });
+
+    const onChangePage = (value) => {
+      store.dispatch("post/fetchAllPost", {
+        ...filters.value,
+        page: value,
+      });
+    };
+
+    return {
+      onChangePage,
+      posts,
+      pagination,
+      isLoading,
+      URL,
+    };
   },
 });
 </script>
@@ -22,7 +51,6 @@ export default defineComponent({
 
       <div class="position-relative">
         <v-progress-linear
-          v-if="isLoading"
           color="green"
           indeterminate
           rounded
@@ -34,16 +62,47 @@ export default defineComponent({
           <thead>
             <tr>
               <th class="text-left">Tên danh mục</th>
-              <th class="text-left">Ảnh tiêu đề</th>
-              <th class="text-left">Slug</th>
-              <th class="text-left">Hành động</th>
+              <th class="text-center">Ảnh tiêu đề</th>
+              <th class="text-center">Slug</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <tr v-for="post in posts" :key="post._id">
+              <td style="width: 300px">
+                <p class="text-truncate" style="max-width: 300px">
+                  {{ post.title }}
+                </p>
+              </td>
+              <td>
+                <p class="text-truncate">
+                  <v-sheet
+                    class="rounded p-2"
+                    max-width="100"
+                    elevation="12"
+                    height="100%"
+                    width="100%"
+                  >
+                    <v-img :src="`${URL}/${post.image_title}`" />
+                  </v-sheet>
+                </p>
+              </td>
+              <td style="width: 400px">
+                <p class="text-truncate" style="max-width: 300px">
+                  {{ post.detail_html }}
+                </p>
+              </td>
+              <td>
+                <p class="text-truncate">
+                  <v-btn>Sửa</v-btn>
+                </p>
+              </td>
+            </tr>
+          </tbody>
         </v-table>
       </div>
 
-      <v-row justify="center">
+      <!-- <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="50%">
           <v-card>
             <v-card-title class="text-h5">Xác nhận trước khi xoá</v-card-title>
@@ -65,14 +124,14 @@ export default defineComponent({
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-row>
+      </v-row> -->
 
       <div class="text-center mt-5">
-        <!-- <v-pagination
+        <v-pagination
           v-model="pagination.page"
           :length="pagination.totalRows"
-          @update:modelValue="changePage"
-        ></v-pagination> -->
+          @update:modelValue="onChangePage"
+        ></v-pagination>
       </div>
     </v-col>
   </v-row>
