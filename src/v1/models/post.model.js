@@ -14,11 +14,9 @@ const PostSchema = new Schema(
     detail_text: {
       type: String,
       default: "",
-      required: true,
     },
     detail_html: {
       type: String,
-      default: "",
       required: true,
     },
     image_title: {

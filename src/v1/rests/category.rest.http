@@ -3,7 +3,11 @@
 
 ###Get all category
 
-Get {{url}}
+Get {{url}}?where=level,1
+
+###Get all with children
+
+Get {{url}}/children
 
 ###Get by id
 
@@ -13,18 +17,15 @@ Get {{url}}/63d5e169d08aebe295d5e1af
 
 Get {{url}}/parent/63c7c0ff8015cb65d7433c15
 
-### get get-role-id-gte-5
-Get {{url}}/get-role-id-gte-5
-
 ### create category
 Post {{url}}
 Content-Type: application/json
 
 {
-    "name":"Blockchain3",
-    "slug": "block-chain3",
+    "name":"Kinh tế con",
+    "slug": "Kinh-te-con",
     "level": 2,
-    "parentId": "63c7c0ff8015cb65d7433c15"
+    "parentId": "63de297f425226c500ff08fc"
 }
 
 ### update

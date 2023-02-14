@@ -15,6 +15,19 @@ class ParentService {
         let options = { is_delete: false };
         let sort = filters.sort || "_id";
         let sortBy = {};
+        let where = filters.where;
+        let whereBy = {};
+
+        where ? (where = where.split(",")) : (where = [where]);
+
+        where[1] && (whereBy[where[0]] = where[1]);
+
+        if (where) {
+          options = {
+            ...options,
+            ...whereBy,
+          };
+        }
 
         filters.sort ? (sort = filters.sort.split(",")) : (sort = [sort]);
         // * ["sort" , "desc"] || ["_id"]
@@ -24,7 +37,7 @@ class ParentService {
 
         if (filters.search && filters.field) {
           options = {
-            is_delete: false,
+            ...options,
             [filters.field]: { $regex: filters.search, $options: "i" },
           };
         }
@@ -66,25 +79,33 @@ class ParentService {
     };
   };
 
-  getById = async (id) => {
+  getById = async (id, isPostModel = false) => {
     return new Promise(async (resolve, reject) => {
       try {
         if (!typeOfObjectId(id)) {
           return resolve({
             errors: {
-              message: "Id khong dung gia tri",
+              message: "Id không đúng giá trị",
             },
             elements: null,
             status: 400,
           });
         }
 
-        const response = await this.model.findById(id);
+        let response;
+        if (!isPostModel) {
+          response = await this.model.findById(id).exec();
+        } else {
+          response = await this.model
+            .findById(id)
+            .populate("category_id", "_id parent_id name")
+            .exec();
+        }
 
         if (!response) {
           return resolve({
             errors: {
-              message: "Id khong ton tai",
+              message: "Id không tồn tại",
             },
             elements: {},
             status: 200,
@@ -113,7 +134,7 @@ class ParentService {
         if (!response) {
           return resolve({
             errors: {
-              message: "Id khong ton tai",
+              message: "Id không tồn tại",
             },
             status: 400,
           });

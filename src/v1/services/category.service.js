@@ -5,7 +5,7 @@ class CategoryService extends ParentService {
   superCreate = this.create;
   superUpdate = this.update;
 
-  getAll = (filter = {}) => {
+  getAllWithChildren = () => {
     return new Promise(async (resolve, reject) => {
       try {
         let result = await this.model.find({ is_delete: false });
@@ -52,9 +52,10 @@ class CategoryService extends ParentService {
     return new Promise(async (resolve, reject) => {
       try {
         const { name, level, parentId } = data;
-        console.log("Loc khung", data);
 
-        const findName = await this.model.findOne({ name: name }).exec();
+        const findName = await this.model
+          .findOne({ is_delete: false, name: name })
+          .exec();
 
         if (findName) {
           return resolve({

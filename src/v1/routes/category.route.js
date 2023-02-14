@@ -4,6 +4,7 @@ const categoryController = require("../controllers/category.controller");
 const router = Router();
 
 router.get("/", categoryController.getAll);
+router.get("/children", categoryController.getAllWithChildren);
 router.post("/", categoryController.create);
 router.get("/:id", categoryController.getById);
 router.get("/parent/:id", categoryController.getByParentId);

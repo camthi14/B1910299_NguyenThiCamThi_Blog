@@ -3,6 +3,7 @@ const ParentService = require("./parent.service");
 class PostService extends ParentService {
   superCreate = this.create;
   superUpdate = this.update;
+  superGetById = this.getById;
 
   create = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -56,6 +57,10 @@ class PostService extends ParentService {
         reject(error);
       }
     });
+  };
+
+  getById = (id, isPostModel = true) => {
+    return this.superGetById(id, isPostModel);
   };
 }
 
