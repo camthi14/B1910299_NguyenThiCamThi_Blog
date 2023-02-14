@@ -1,5 +1,0 @@
-Set up apis axios
-Set up lay out with router-vue
-    +tạo file trong thư mục views
-    +index=> xử lý đường dẫn
-    +tạo thư mục pages chứa thư mục manager(dashboard) and show
