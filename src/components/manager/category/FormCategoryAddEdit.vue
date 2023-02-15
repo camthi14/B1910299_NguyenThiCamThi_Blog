@@ -54,8 +54,8 @@ export default defineComponent({
         };
         try {
           let response;
-          const selectedEmpty = Object.keys(props.selected).length === 0;
-          const parentEmpty = Object.keys(props.parent).length === 0;
+          const selectedEmpty = Object.keys(props.selected).length === 0; // selected === 0 => khong co id => add
+          const parentEmpty = Object.keys(props.parent).length === 0; // parent === 0 => cha
 
           //isModeUpdate là object không thể sử dụng ! để so sánh
           if (selectedEmpty) {
@@ -77,7 +77,7 @@ export default defineComponent({
           if (response && response.elements) {
             const payload = {
               text: `${selectedEmpty ? "Thêm" : "Cập nhật"} danh mục ${
-                parentEmpty ? "con" : ""
+                !parentEmpty ? "con" : ""
               } thành công!`,
               color: "success",
               open: true,

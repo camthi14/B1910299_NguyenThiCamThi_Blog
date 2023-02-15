@@ -1,4 +1,5 @@
 import postApi from "@/apis/postApi";
+import moment from "moment/moment";
 import toast from "./toast";
 
 const state = () => ({
@@ -28,6 +29,9 @@ const mutations = {
     state.isLoading = false;
     state.posts = payload.elements;
     state.pagination = payload.meta.pagination;
+  },
+  fetchUpdateSuccess: (state) => {
+    state.isLoading = false;
   },
   fetchFail: (state, error) => {
     state.isLoading = false;
@@ -73,6 +77,7 @@ const actions = {
       }
     });
   },
+
   fetchAllPost: async ({ commit, dispatch }, payload) => {
     try {
       commit("fetchStart");
@@ -94,9 +99,84 @@ const actions = {
       }
     }
   },
+
+  fetchDeletePost: async ({ commit, dispatch, state }, payload) => {
+    try {
+      commit("fetchStart");
+
+      const response = await postApi.delete(payload);
+
+      if (response) {
+        const payload = {
+          text: "Xoá bài viết thành công!",
+          color: "success",
+          open: true,
+        };
+        dispatch("toast/startToast", payload, { root: true });
+        dispatch("fetchAllPost", { ...state.filters });
+      }
+    } catch (error) {
+      if (!error.response) {
+        const payload = {
+          text: error.message,
+          color: "error",
+          open: true,
+        };
+        dispatch("toast/startToast", payload, { root: true });
+        commit("fetchFail", error.message);
+      }
+    }
+  },
+
+  fetchUpdatePost: ({ commit, dispatch }, payload) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        commit("fetchStart");
+        const response = await postApi.update(payload);
+        if (response && response.elements) {
+          const payload = {
+            text: "Cập nhật bài viết thành công!",
+            color: "success",
+            open: true,
+            timeout: 2000,
+          };
+          dispatch("toast/startToast", payload, { root: true });
+          commit("fetchUpdateSuccess");
+          resolve(true);
+        }
+      } catch (error) {
+        let payload = {
+          text: error.message,
+          color: "error",
+          open: true,
+          timeout: 2000,
+        };
+        if (error.response) {
+          payload = {
+            ...payload,
+            text: error.response.data.errors.message,
+          };
+          commit("fetchFail", error.response.data.errors.message);
+        } else {
+          commit("fetchFail", error.message);
+        }
+        dispatch("toast/startToast", payload, { root: true });
+        reject(error);
+      }
+    });
+  },
 };
 
-const getters = {};
+const getters = {
+  getPost: (state) => {
+    if (state.posts.length > 0) {
+      return state.posts.map((post) => ({
+        ...post,
+        createdAt: moment(post.createdAt).format("YYYY-MM-DD h:mm A"),
+      }));
+    }
+  },
+};
 
 export default {
   namespaced: true,

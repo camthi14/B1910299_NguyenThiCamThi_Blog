@@ -38,7 +38,7 @@ const mutations = {
   setFilter: (state, payload) => {
     state.filters = payload;
   },
-  setSubCaterogy: (state, payload) => {
+  setSubCategory: (state, payload) => {
     state.categorySub = payload;
   },
 };
@@ -51,7 +51,11 @@ const actions = {
       const response = await categoryApi.getAll(filters);
 
       if (response && response.elements) {
-        if (!filters?.where || (filters.where && filters.where === "level,1")) {
+        if (
+          !filters?.where ||
+          (filters.where && filters.where === "level,1") ||
+          filters.isCategory
+        ) {
           commit("fetchAllSuccess", response);
         } else {
           commit("fetchAllSubSuccess", response);
@@ -70,11 +74,12 @@ const actions = {
       }
     }
   },
+
   changeFilter: ({ commit }, payload) => {
     commit("setFilter", payload);
   },
   changeSubCategory: ({ commit }, payload) => {
-    commit("setSubCaterogy", payload);
+    commit("setSubCategory", payload);
   },
 };
 

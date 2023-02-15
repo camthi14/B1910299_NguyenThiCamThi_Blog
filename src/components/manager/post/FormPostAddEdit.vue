@@ -14,8 +14,13 @@ export default defineComponent({
     isModeAdd: {
       type: Boolean,
     },
+    postSelected: {
+      type: Object,
+      default: {},
+    },
   },
-  setup({ isModeAdd }) {
+
+  setup(props) {
     const store = useStore();
     const router = useRouter();
     const title = ref("");
@@ -46,6 +51,50 @@ export default defineComponent({
     const loading = ref(false);
 
     const user = computed(() => store.state.auth.user);
+    const URL = computed(() => process.env.VUE_APP_ENDPOINT_URL);
+
+    watch(
+      () => props.postSelected,
+      (post) => {
+        if (post) {
+          title.value = post.title;
+          slug.value = slugify(post.title, { locale: "vi" });
+          imgUrl.value = `${URL.value}/${post.image_title}`;
+          editorData.value = post.detail_html;
+
+          if (post?.category_id.parent_id) {
+            categoryId.value = post?.category_id.parent_id;
+            store.dispatch("category/fetchAllCategory", {
+              page: 1,
+              limit: 100,
+              where: `parent_id, ${post?.category_id.parent_id}`,
+            });
+            categorySubId.value = post?.category_id._id;
+          } else {
+            categoryId.value = post?.category_id._id;
+          }
+        }
+      }
+    );
+
+    watch(
+      [categoryId, title, editorData],
+      ([categoryId, titleNew, editorData]) => {
+        !categoryId
+          ? (errors["categoryId"] = true)
+          : delete errors["categoryId"];
+
+        slug.value = slugify(titleNew, { locale: "vi" });
+        titleNew.length >= max || titleNew.length <= min
+          ? (errors["title"] = true)
+          : delete errors["title"];
+
+        !editorData
+          ? (errors["editorData"] = true)
+          : delete errors["editorData"];
+      }
+    );
+
     const categories = computed(() => [
       { _id: "", name: "Vui lòng chọn danh mục" },
       ...store.state.category.categories,
@@ -65,32 +114,26 @@ export default defineComponent({
       });
     });
 
-    watch(
-      [categoryId, title, editorData],
-      ([categoryId, titleNew, editorData]) => {
-        !categoryId ? (errors["categoryId"] = true) : (errors = {});
-
-        slug.value = slugify(titleNew, { locale: "vi" });
-        titleNew.length >= max ? (errors["title"] = true) : (errors = {});
-
-        !editorData ? (errors["editorData"] = true) : (errors = {});
-      }
-    );
-
     const handleSubmit = async () => {
       if (Object.keys(errors).length === 0) {
         loading.value = true;
-        // * trước khi tạo bài viết phải upload lên server
-        const resImg = await uploadApi.image(image.value[0]);
-        console.log(image);
+
         let data = {
           title: title.value,
           slug: slug.value,
           detail_html: editorData.value,
           categoryId: categoryId.value,
           userId: user.value._id,
-          image_title: resImg?.filename,
         };
+
+        if (image.value) {
+          // * trước khi tạo bài viết phải upload lên server
+          const resImg = await uploadApi.image(image.value[0]);
+          data = {
+            ...data,
+            image_title: resImg?.filename,
+          };
+        }
 
         if (categorySubId.value) {
           data = {
@@ -98,17 +141,39 @@ export default defineComponent({
             categoryId: categorySubId.value,
           };
         }
-        console.log(data);
-        //* call api save bai viet
-        store
-          .dispatch("post/fetchCreatePost", data)
-          .then((value) => {
-            if (value) {
-              loading.value = false;
-              router.push("/manager/post");
-            }
-          })
-          .catch((_) => (loading.value = false));
+        if (props.isModeAdd) {
+          //* call api save bai viet
+          store
+            .dispatch("post/fetchCreatePost", data)
+            .then((value) => {
+              if (value) {
+                loading.value = false;
+                router.push("/manager/post");
+              }
+            })
+            .catch((_) => (loading.value = false));
+        } else {
+          //* call api update bai viet
+          store
+            .dispatch("post/fetchUpdatePost", {
+              id: props.postSelected._id,
+              data,
+            })
+            .then((value) => {
+              if (value) {
+                loading.value = false;
+                router.push("/manager/post");
+              }
+            })
+            .catch((_) => (loading.value = false));
+        }
+      } else {
+        store.dispatch("toast/startToast", {
+          text: "Vui lòng điền chính xác các thông tin",
+          color: "error",
+          open: true,
+          timeout: 3000,
+        });
       }
     };
 
@@ -161,6 +226,7 @@ export default defineComponent({
       user,
       categories,
       isExistCategorySub,
+      isModeAdd: props.isModeAdd,
       categorySubId,
       categorySub,
       editorData,
@@ -260,7 +326,7 @@ export default defineComponent({
           !title ||
           !categoryId ||
           !editorData ||
-          !image ||
+          !imgUrl ||
           (isExistCategorySub && !categorySubId) ||
           loading
         "
