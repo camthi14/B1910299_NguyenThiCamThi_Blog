@@ -27,8 +27,6 @@ export default defineComponent({
           token: token.value,
         });
 
-        console.log(response);
-
         if (response) {
           const payload = {
             text: "Thay đổi mật khẩu thành công!",
@@ -58,11 +56,7 @@ export default defineComponent({
   <v-form class="form-forgot-pass" @submit.prevent="handleSubmit">
     <h1 class="mb-5 text-center">Thay đổi mật khẩu</h1>
 
-    <v-alert v-if="messageAlert" type="success" class="mb-3">{{
-      messageAlert
-    }}</v-alert>
-
-    <v-text-field v-model="password" label="Mật khẩu mới" />
+    <v-text-field type="password" v-model="password" label="Mật khẩu mới" />
 
     <div class="text-center">
       <v-btn

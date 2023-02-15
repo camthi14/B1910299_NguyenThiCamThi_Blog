@@ -89,6 +89,9 @@ export default defineComponent({
             loading.value = false;
             messageAlert.value = "Hãy kiểm tra email để có thể đổi mật khẩu!";
           }
+          setTimeout(() => {
+            dialog.value = false;
+          }, 5000);
         }
       } catch (error) {
         loading.value = false;
