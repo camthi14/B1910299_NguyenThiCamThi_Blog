@@ -4,6 +4,7 @@ class PostService extends ParentService {
   superCreate = this.create;
   superUpdate = this.update;
   superGetById = this.getById;
+  superGetAll = this.getAll;
 
   create = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -51,7 +52,10 @@ class PostService extends ParentService {
           });
         }
 
-        const response = await this.superUpdate({ id, data });
+        const response = await this.superUpdate({
+          id,
+          data: { ...data, category_id: data.categoryId },
+        });
         resolve(response);
       } catch (error) {
         reject(error);
@@ -61,6 +65,10 @@ class PostService extends ParentService {
 
   getById = (id, isPostModel = true) => {
     return this.superGetById(id, isPostModel);
+  };
+
+  getAll = (filters, isPostModel = true) => {
+    return this.superGetAll(filters, isPostModel);
   };
 }
 

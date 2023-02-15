@@ -13,8 +13,6 @@ class PostController extends ParentController {
     try {
       const data = req.body;
 
-      console.log(data);
-
       if (
         !data.title ||
         !data.detail_html ||
@@ -33,7 +31,7 @@ class PostController extends ParentController {
         !typeOfObjectId(data.userId + "")
       ) {
         return next({
-          message: " CAtegory id hoặc ủe id không hợp lệ!",
+          message: " CAtegory id hoặc user id không hợp lệ!",
           status: 400,
         });
       }
