@@ -69,6 +69,9 @@ export default defineComponent({
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
+      <router-link to="/">
+        <v-avatar class="" color="grey-darken-1" size="32"></v-avatar>
+      </router-link>
       <v-toolbar-title>Hello, {{ user && user.email }}</v-toolbar-title>
 
       <v-btn

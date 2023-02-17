@@ -126,7 +126,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-form @submit.prevent="handleSubmit">
+  <v-form @submit.prevent="handleSubmit" style="width: 100%">
     <h1 class="mb-5">Đăng nhập hệ thống</h1>
 
     <v-alert class="mb-5" type="error" v-if="errorMessage">{{

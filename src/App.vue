@@ -45,7 +45,10 @@ export default defineComponent({
 </template>
 
 <style>
+.v-list-item:hover {
+  background: rgba(220, 243, 190, 0.2);
+}
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #62ab00;
 }
 </style>

@@ -17,8 +17,10 @@ function onClick() {
         "
         @click="onClick"
       >
-        Toggle Theme
       </v-btn>
+      <router-link to="/login" class="text-decoration-none text-success">
+        <v-btn variant="outlined">Đăng nhập</v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-main>
