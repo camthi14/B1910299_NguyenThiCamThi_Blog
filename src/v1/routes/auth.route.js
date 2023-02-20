@@ -12,6 +12,7 @@ router.get(
 );
 router.post("/sign-out", authController.signOut);
 router.get("/verify/:email", authController.verifyAccount);
+router.post("/resend-verify-account", authController.resendVerifyAccount);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/forgot-password/:email", authController.changePassword);
 router.get("/refresh-token", authController.refreshToken);

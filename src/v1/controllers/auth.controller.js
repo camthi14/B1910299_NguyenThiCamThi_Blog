@@ -30,6 +30,7 @@ class AuthController extends ParentController {
       const response = await this.service.signUp({
         email: data.email,
         password: data.password,
+        ...data,
       });
 
       res.status(response.status).json(response);
@@ -44,6 +45,28 @@ class AuthController extends ParentController {
       const { token } = req.query;
 
       const response = await this.service.verifyAccount({ email, otp: token });
+      res.status(response.status).json(response);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  resendVerifyAccount = async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      console.log(req.body);
+
+      if (!email) {
+        return next({
+          status: 400,
+          message: "Thiếu email",
+        });
+      }
+
+      const response = await this.service.resendVerifyAccount({
+        email,
+      });
+
       res.status(response.status).json(response);
     } catch (error) {
       next(error);

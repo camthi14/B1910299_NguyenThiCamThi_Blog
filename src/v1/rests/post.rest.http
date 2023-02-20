@@ -8,6 +8,10 @@ Get {{url}}
 
 Get {{url}}/63d6124be6507e18feeee20a
 
+###Get by slug
+
+Get {{url}}/slug/Ga-tan-thuoc-bac-don-gian-thom-ngon
+
 ### create category
 Post {{url}}
 Content-Type: application/json

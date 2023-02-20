@@ -94,7 +94,7 @@ class ParentService {
   getById = async (id, isPostModel = false) => {
     return new Promise(async (resolve, reject) => {
       try {
-        if (!typeOfObjectId(id)) {
+        if (!typeOfObjectId(id + "")) {
           return resolve({
             errors: {
               message: "Id không đúng giá trị",

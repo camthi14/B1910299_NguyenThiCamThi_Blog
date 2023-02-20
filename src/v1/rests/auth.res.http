@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
     "email":"camthi010501@gmail.com",
-    "password": "thikhung"
+    "password": "1234567890"
 }
 
 ### changePassword
@@ -37,7 +37,7 @@ Content-Type: application/json
 
 ### get current user
 GET {{url}}/sign-in
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYzYzFhNDY5ZWY5NzkyYzE1MTA0ODdmMyIsImVtYWlsIjoiY2FtdGhpMDEwNTAxQGdtYWlsLmNvbSIsImZ1bGxfbmFtZSI6IiIsInJvbGUiOiJVU0VSIiwiaW1hZ2UiOiIiLCJpc192ZXJpZmllZCI6dHJ1ZX0sImlhdCI6MTY3NDkxNTA4MCwiZXhwIjoxNjc0OTE1MTAwfQ.1uLrvYheObe-K-Qj04L0Mo8kAtv4KJg6vbKGUu56gm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYzYzFhNDY5ZWY5NzkyYzE1MTA0ODdmMyIsImVtYWlsIjoiY2FtdGhpMDEwNTAxQGdtYWlsLmNvbSIsImZ1bGxfbmFtZSI6IiIsInJvbGUiOiJVU0VSIiwiaW1hZ2UiOiIiLCJpc192ZXJpZmllZCI6dHJ1ZX0sImlhdCI6MTY3NjgyMTQwMywiZXhwIjoxNjc2ODMyMjAzfQ.fk9iqIQ-0Mj_rSi96G9txxSYo-nv82F6KziKOz_1CuI
 
 
 ### refresh token
@@ -45,4 +45,12 @@ GET {{url}}/refresh-token
 
 ### Verify account
 GET {{url}}/verify/camthi010501@gmail.com/$2b$10$q8H9NH1QFdFcr2Nu.JeuC.gFVISkH69ZckIZXMbZK3K6oSkXM8rwe
+
+### verify account
+POST {{url}}/resend-verify-account
+Content-Type: application/json
+
+{
+    "email": "manchausa521@gmail.com"
+}
 

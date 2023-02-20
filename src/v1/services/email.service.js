@@ -46,7 +46,14 @@ async function sendEmailVerifyAccount(dataSend, options) {
     });
 
     if (response) {
-      return { status: 201, errors: null, elements: dataSend.data };
+      return {
+        status: 201,
+        errors: null,
+        elements: dataSend.data,
+        meta: {
+          message: "Gửi email thành công!",
+        },
+      };
     }
   } catch (error) {
     return {
