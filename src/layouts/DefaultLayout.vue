@@ -34,9 +34,17 @@ export default defineComponent({
   <v-app id="inspire" :theme="theme">
     <v-app-bar>
       <!-- <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon> -->
-      <v-avatar color="grey-darken-1" size="32"></v-avatar>
+      <v-avatar color="grey-darken-1" size="32">
+        <img
+          cover
+          src="https://media.istockphoto.com/id/1167874731/vi/vec-to/minh-h%E1%BB%8Da-vector-logo-nh%C3%A0-m%C3%A0u-xanh-l%C3%A1-c%C3%A2y.jpg?s=170667a&w=0&k=20&c=di7n-MsjsbX0Qay-jsptKEromWek21QNVevcy3pmmyQ="
+          alt="avt"
+        />
+      </v-avatar>
       <v-toolbar-title>
-        <router-link to="/">Ăn Chay cùng Ashley</router-link>
+        <router-link to="/" class="text-decoration-none"
+          >Mykitches Ashley</router-link
+        >
       </v-toolbar-title>
 
       <v-tabs centered color="grey-darken-2">
@@ -59,12 +67,11 @@ export default defineComponent({
       >
       </v-btn>
 
-      <router-link
-        to="/manager/dashboard"
-        class="text-decoration-none text-success"
-      >
-        <v-btn variant="outlined">Quản Trị Bài Viết</v-btn>
-      </router-link>
+      <div>
+        <v-btn to="/manager/dashboard" class="text-success" variant="outlined">
+          Đăng bài
+        </v-btn>
+      </div>
     </v-app-bar>
     <!-- <SideBar :drawer="drawer" /> -->
 

@@ -27,6 +27,8 @@ export default defineComponent({
         : store.state.auth.user
     );
 
+    console.log(user);
+
     store.dispatch("auth/getCurrentUserLogin").catch(async (error) => {
       if (
         error.response &&

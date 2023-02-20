@@ -16,7 +16,10 @@ export default defineComponent({
     const messageAlert = ref("");
     let errors = {};
 
-    const emailRules = [(v) => /.+@.+\..+/.test(v) || "E-mail không hợp lệ"];
+    const emailRules = [
+      (v) => !!v || "Email là trường bắt buộc",
+      (v) => /.+@.+\..+/.test(v) || "E-mail không hợp lệ",
+    ];
 
     const store = useStore();
     const router = useRouter();
@@ -126,79 +129,103 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-form @submit.prevent="handleSubmit" style="width: 100%">
-    <h1 class="mb-5">Đăng nhập hệ thống</h1>
+  <v-card style="width: 600px" class="cardLogin mx-auto">
+    <v-form @submit.prevent="handleSubmit" style="width: 80%">
+      <div class="text-center mt-5">
+        <h1 class="font-weight-light">Đăng nhập</h1>
+        <p class="font-weight-thin text-h7 my-2">Great to have back!</p>
+      </div>
 
-    <v-alert class="mb-5" type="error" v-if="errorMessage">{{
-      errorMessage
-    }}</v-alert>
+      <v-alert class="mb-5" type="error" v-if="errorMessage">{{
+        errorMessage
+      }}</v-alert>
 
-    <v-text-field v-model="email" label="E-mail" :rules="emailRules" />
-    <v-text-field v-model="password" type="password" label="Mật khẩu" />
+      <v-text-field v-model="email" label="E-mail" :rules="emailRules" />
+      <v-text-field
+        class="mt-2"
+        v-model="password"
+        type="password"
+        label="Mật khẩu"
+      />
 
-    <p
-      class="text-error cursor-point d-inline-block ml-3"
-      @click="onOpenForgotPass"
-    >
-      Quên mật khẩu
-    </p>
+      <p
+        class="text-error cursor-point text-center text-decoration-underline"
+        @click="onOpenForgotPass"
+      >
+        Quên mật khẩu?
+      </p>
 
-    <v-btn
-      type="submit"
-      :disabled="!email || !password"
-      color="success"
-      class="mt-5 d-block"
-    >
-      Đăng nhập
-    </v-btn>
+      <div class="center mb-5">
+        <v-btn
+          type="submit"
+          :disabled="!email || !password || loading"
+          color="grey-darken-4"
+          :loading="loading"
+          class="mt-3 text-center"
+          >Đăng nhập
+          <template v-slot:loader>
+            <span class="custom-loader">
+              <v-icon light>mdi-cached</v-icon>
+            </span>
+          </template>
+        </v-btn>
+      </div>
 
-    <!-- model forgot password -->
-    <v-dialog v-model="dialog" persistent width="1024">
-      <v-form class="form-forgot-pass" @submit.prevent="submitFormForgotPass">
-        <h1 class="mb-5 text-center">Quên mật khẩu</h1>
+      <!-- model forgot password -->
+      <v-dialog v-model="dialog" persistent width="1024">
+        <v-form class="form-forgot-pass" @submit.prevent="submitFormForgotPass">
+          <h1 class="mb-5 text-center">Quên mật khẩu</h1>
 
-        <v-alert v-if="messageAlert" type="success" class="mb-3">{{
-          messageAlert
-        }}</v-alert>
+          <v-alert v-if="messageAlert" type="success" class="mb-3">{{
+            messageAlert
+          }}</v-alert>
 
-        <v-text-field
-          v-model="emailForgotPass"
-          label="E-mail"
-          :rules="emailRules"
-        />
+          <v-text-field
+            v-model="emailForgotPass"
+            label="E-mail"
+            :rules="emailRules"
+          />
 
-        <div class="text-center">
-          <v-btn
-            class="mt-5"
-            color="error"
-            variant="text"
-            @click="dialog = false"
-          >
-            Huỷ
-          </v-btn>
-          <v-btn
-            type="submit"
-            class="mt-5"
-            :loading="loading"
-            :disabled="!emailForgotPass || loading"
-            color="success"
-          >
-            Gửi
-            <template v-slot:loader>
-              <span class="custom-loader">
-                <v-icon light>mdi-cached</v-icon>
-              </span>
-            </template>
-          </v-btn>
-        </div>
-      </v-form>
-    </v-dialog>
-  </v-form>
+          <div class="text-center">
+            <v-btn
+              class="mt-5"
+              color="error"
+              variant="text"
+              @click="dialog = false"
+            >
+              Huỷ
+            </v-btn>
+            <v-btn
+              type="submit"
+              class="mt-5"
+              :loading="loading"
+              :disabled="!emailForgotPass || loading"
+              color="success"
+            >
+              Gửi
+              <template v-slot:loader>
+                <span class="custom-loader">
+                  <v-icon light>mdi-cached</v-icon>
+                </span>
+              </template>
+            </v-btn>
+          </div>
+        </v-form>
+      </v-dialog>
+    </v-form>
+  </v-card>
 </template>
 
-<style crops>
+<style scoped>
 .form-forgot-pass {
   padding: 40px;
   background: #f5f5f5;
+}
+.cardLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 25px 45px rgb(1 2 2 / 12%);
 }
 </style>

@@ -5,5 +5,22 @@ import router from "./router";
 import store from "./store";
 import "./assets/css/styles.css";
 import CKEditor from "@ckeditor/ckeditor5-vue";
+import { ObserveVisibility } from "vue-observe-visibility";
 
-createApp(App).use(store).use(router).use(vuetify).use(CKEditor).mount("#app");
+const app = createApp(App);
+
+app.directive("observe-visibility", {
+  beforeMount: (el, binding, vnode) => {
+    vnode.context = binding.instance;
+    ObserveVisibility.bind(el, binding, vnode);
+  },
+  update: ObserveVisibility.update,
+  unmounted: ObserveVisibility.unbind,
+});
+
+app.use(store);
+app.use(router);
+app.use(vuetify);
+app.use(CKEditor);
+
+app.mount("#app");

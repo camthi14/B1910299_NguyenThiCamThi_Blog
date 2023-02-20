@@ -11,8 +11,16 @@ const postApi = {
       params: filters,
     });
   },
+  getAllSlide: async (filters = {}) => {
+    return await instance.get(`${nameModel}/slide`, {
+      params: filters,
+    });
+  },
   getById: async (id) => {
     return await instance.get(`${nameModel}/${id}`);
+  },
+  getBySlug: async (slug) => {
+    return await instance.get(`${nameModel}/slug/${slug}`);
   },
   update: async ({ id, data }) => {
     return await instance.patch(`${nameModel}/${id}`, data);

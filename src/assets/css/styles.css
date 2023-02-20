@@ -7,6 +7,13 @@
     display: flex;
 }
 
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 @-moz-keyframes loader {
     from {
         transform: rotate(0);

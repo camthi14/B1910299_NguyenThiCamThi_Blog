@@ -18,8 +18,14 @@ const homeRoute = [
         name: "category.slug",
         component: () =>
           import(
-            /* webpackChunkName: "HomeView" */ "../views/CategorySlug.vue"
+            /* webpackChunkName: "CategorySlug" */ "../views/CategorySlug.vue"
           ),
+      },
+      {
+        path: "post/:slug",
+        name: "post.slug",
+        component: () =>
+          import(/* webpackChunkName: "PostSlug" */ "../views/PostSlug.vue"),
       },
     ],
   },

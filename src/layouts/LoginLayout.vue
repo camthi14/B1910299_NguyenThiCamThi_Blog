@@ -1,9 +1,19 @@
-<script setup>
-import { ref } from "vue";
-const theme = ref("light");
-function onClick() {
-  theme.value = theme.value === "light" ? "dark" : "light";
-}
+<script>
+import { defineComponent, ref } from "vue";
+
+export default defineComponent({
+  setup() {
+    const theme = ref("light");
+    const onClick = () => {
+      theme.value = theme.value === "light" ? "dark" : "light";
+    };
+    // const handleLogout = () => {};
+    return {
+      onClick,
+      theme,
+    };
+  },
+});
 </script>
 
 <template>
@@ -18,12 +28,15 @@ function onClick() {
         @click="onClick"
       >
       </v-btn>
-      <router-link to="/login" class="text-decoration-none text-success">
-        <v-btn variant="outlined">Đăng nhập</v-btn>
-      </router-link>
+      <v-btn to="/login" class="text-success mr-2" variant="outlined">
+        Đăng nhập
+      </v-btn>
+      <v-btn to="/register" class="text-primary" variant="outlined">
+        Đăng Ký
+      </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="loginLayout">
       <v-container>
         <v-row>
           <v-col>
@@ -34,3 +47,11 @@ function onClick() {
     </v-main>
   </v-app>
 </template>
+
+<style>
+.loginLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

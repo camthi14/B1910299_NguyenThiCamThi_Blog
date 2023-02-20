@@ -1,5 +1,10 @@
 <script>
-import { computed, defineComponent, onMounted, ref } from "@vue/runtime-core";
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  ref,
+} from "@vue/runtime-core";
 import { useStore } from "vuex";
 import CardHomeItem from "../components/CardHomeItem.vue";
 
@@ -11,8 +16,8 @@ export default defineComponent({
 
     const posts = computed(() => store.state.post.posts);
 
-    onMounted(() => {
-      store.dispatch("post/fetchAllPost", { page: 1, limit: 5 });
+    onBeforeMount(() => {
+      store.dispatch("post/fetchAllPostSlide");
     });
     return {
       onboarding,
@@ -51,9 +56,11 @@ export default defineComponent({
           height="200"
         >
           <v-card-item class="text-center">
-            <div class="text-overline mb-1">{{ post.title }}</div>
-            <div class="text-caption">
-              {{ post.user_id.email }}
+            <div class="text-overline mb-1 text-h1 font-weight-bold">
+              {{ post.title }}
+            </div>
+            <div class="text-caption" style="padding: 0 50px">
+              {{ post.detail_text }}
             </div>
           </v-card-item>
 

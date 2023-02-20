@@ -25,6 +25,8 @@ export default defineComponent({
     const router = useRouter();
     const title = ref("");
     const slug = ref("");
+    const detailText = ref("");
+    const countDetailText = 400;
     const max = 200;
     const min = 20;
     const errorMessage = ref("");
@@ -33,6 +35,13 @@ export default defineComponent({
       (v) =>
         (v && v.length <= max) || `Tên tiêu đề không vượt quá ${max} kí tự`,
       (v) => (v && v.length >= min) || `Tên tiêu đề ít nhất ${min} kí tự`,
+    ];
+    const ruleDetailText = [
+      (v) => !!v || "Giới thiệu là trường bắt buộc",
+      (v) =>
+        (v && v.length <= countDetailText) ||
+        `Giới thiệu không vượt quá ${countDetailText} kí tự`,
+      (v) => (v && v.length >= 40) || `Giới thiệu ít nhất ${40} kí tự`,
     ];
     const ruleImage = [
       (value) =>
@@ -61,6 +70,7 @@ export default defineComponent({
           slug.value = slugify(post.title, { locale: "vi" });
           imgUrl.value = `${URL.value}/${post.image_title}`;
           editorData.value = post.detail_html;
+          detailText.value = post.detail_text;
 
           if (post?.category_id.parent_id) {
             categoryId.value = post?.category_id.parent_id;
@@ -78,8 +88,8 @@ export default defineComponent({
     );
 
     watch(
-      [categoryId, title, editorData],
-      ([categoryId, titleNew, editorData]) => {
+      [categoryId, title, editorData, detailText],
+      ([categoryId, titleNew, editorData, detailText]) => {
         !categoryId
           ? (errors["categoryId"] = true)
           : delete errors["categoryId"];
@@ -92,6 +102,9 @@ export default defineComponent({
         !editorData
           ? (errors["editorData"] = true)
           : delete errors["editorData"];
+        !detailText
+          ? (errors["detailText"] = true)
+          : delete errors["detailText"];
       }
     );
 
@@ -124,6 +137,7 @@ export default defineComponent({
           detail_html: editorData.value,
           categoryId: categoryId.value,
           userId: user.value._id,
+          detail_text: detailText.value,
         };
 
         if (image.value) {
@@ -218,7 +232,10 @@ export default defineComponent({
       onChangeEditor,
       title,
       slug,
+      detailText,
+      ruleDetailText,
       max,
+      countDetailText,
       errorMessage,
       ruleTitle,
       errors,
@@ -263,6 +280,15 @@ export default defineComponent({
           type="text"
           label="Slug bài viết"
           disabled
+        />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field
+          v-model="detailText"
+          type="text"
+          label="Giới Thiệu"
+          :counter="countDetailText"
+          :rules="ruleDetailText"
         />
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="6" lg="6">
@@ -327,6 +353,7 @@ export default defineComponent({
           !categoryId ||
           !editorData ||
           !imgUrl ||
+          !detailText ||
           (isExistCategorySub && !categorySubId) ||
           loading
         "

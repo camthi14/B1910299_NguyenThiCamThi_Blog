@@ -6,11 +6,11 @@ export default defineComponent({
   setup() {
     const route = useRoute();
 
-    console.log(route.params);
+    // console.log(route.params);
 
     const slug = computed(() => route.params?.slug);
 
-    console.log(slug);
+    // console.log(slug);
     return {
       slug,
     };

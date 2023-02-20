@@ -4,6 +4,7 @@ import toast from "./toast";
 
 const state = () => ({
   posts: [],
+  postSlides: [],
   isLoading: false,
   error: "",
   filters: {
@@ -29,6 +30,27 @@ const mutations = {
     state.isLoading = false;
     state.posts = payload.elements;
     state.pagination = payload.meta.pagination;
+    state.filters = {
+      ...state.filters,
+      limit: payload.meta.pagination.limit || 5,
+    };
+  },
+  fetchAllHomeSuccess: (state, payload) => {
+    state.isLoading = false;
+    state.posts.push(...payload.elements);
+    state.pagination = payload.meta.pagination;
+    state.filters = {
+      ...state.filters,
+      limit: payload.meta.pagination.limit || 5,
+    };
+  },
+  fetchAllSlideSuccess: (state, payload) => {
+    state.isLoading = false;
+    state.postSlides = payload.elements;
+    state.filters = {
+      ...state.filters,
+      limit: payload.meta.pagination.limit || 5,
+    };
   },
   fetchUpdateSuccess: (state) => {
     state.isLoading = false;
@@ -36,6 +58,13 @@ const mutations = {
   fetchFail: (state, error) => {
     state.isLoading = false;
     state.error = error;
+  },
+  setFilter: (state, payload) => {
+    console.log("setFilter", payload);
+    state.filters = {
+      ...state.filters,
+      ...payload,
+    };
   },
 };
 
@@ -85,7 +114,33 @@ const actions = {
       const response = await postApi.getAll(payload);
 
       if (response && response.elements) {
-        commit("fetchAllSuccess", response);
+        if (payload?.isHome) {
+          commit("fetchAllHomeSuccess", response);
+        } else {
+          commit("fetchAllSuccess", response);
+        }
+      }
+    } catch (error) {
+      if (!error.response) {
+        const payload = {
+          text: error.message,
+          color: "error",
+          open: true,
+        };
+        dispatch("toast/startToast", payload, { root: true });
+        commit("fetchFail", error.message);
+      }
+    }
+  },
+
+  fetchAllPostSlide: async ({ commit, dispatch }, payload) => {
+    try {
+      commit("fetchStart");
+
+      const response = await postApi.getAllSlide(payload);
+
+      if (response && response.elements) {
+        commit("fetchAllSlideSuccess", response);
       }
     } catch (error) {
       if (!error.response) {
@@ -164,6 +219,10 @@ const actions = {
         reject(error);
       }
     });
+  },
+  changeFilter: ({ commit }, payload) => {
+    console.log("changeFilter", payload);
+    commit("setFilter", payload);
   },
 };
 

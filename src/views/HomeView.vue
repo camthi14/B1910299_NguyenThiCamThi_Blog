@@ -19,29 +19,27 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <Slides />
-      </v-col>
+  <v-row>
+    <v-col cols="12">
+      <Slides />
+    </v-col>
 
-      <v-col cols="12" sm="3">
-        <v-sheet rounded="lg">
-          <CardHomeLeft />
-        </v-sheet>
-      </v-col>
+    <v-col cols="12" sm="3">
+      <v-sheet rounded="lg">
+        <CardHomeLeft />
+      </v-sheet>
+    </v-col>
 
-      <v-col cols="12" sm="6">
-        <v-sheet rounded="lg">
-          <CardHome />
-        </v-sheet>
-      </v-col>
+    <v-col cols="12" sm="6">
+      <v-sheet rounded="lg">
+        <CardHome />
+      </v-sheet>
+    </v-col>
 
-      <v-col cols="12" sm="3">
-        <v-sheet rounded="lg">
-          <CardHomeRight />
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </v-container>
+    <v-col cols="12" sm="3">
+      <v-sheet rounded="lg">
+        <CardHomeRight />
+      </v-sheet>
+    </v-col>
+  </v-row>
 </template>
