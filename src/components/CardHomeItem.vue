@@ -15,6 +15,7 @@ export default defineComponent({
     const URL_IMG = computed(
       () => process.env.VUE_APP_ENDPOINT_URL + "/" + item.image_title
     );
+
     return {
       item,
       URL_IMG,
@@ -39,9 +40,9 @@ export default defineComponent({
       <div class="font-weight-bold text-h7">
         Tác giả:
         {{
-          item.user_id && !item.user_id.full_name
-            ? "Ẩn danh"
-            : item.user_id.full_name
+          item?.user_id && item?.user_id?.full_name
+            ? item.user_id.full_name
+            : "Ẩn danh"
         }}
       </div>
       <div class="font-weight-thin">Thời gian đăng: {{ timeStamp }}</div>

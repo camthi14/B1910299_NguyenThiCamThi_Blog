@@ -1,5 +1,10 @@
 <script>
-import { computed, defineComponent, onBeforeMount } from "@vue/runtime-core";
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  watch,
+} from "@vue/runtime-core";
 import { useStore } from "vuex";
 import CardHomeItem from "../components/CardHomeItem.vue";
 
@@ -14,13 +19,20 @@ export default defineComponent({
     const filters = computed(() => store.state.post.filters);
     const pagination = computed(() => store.state.post.pagination);
 
-    onBeforeMount(() => {
-      if (filters.value.page >= pagination.value.totalRows) return;
+    const fetchAllPost = ({ filters, page, totalRows }) => {
+      if (page >= totalRows) return;
+      store.dispatch("post/fetchAllPost", filters);
+    };
 
-      store.dispatch("post/fetchAllPost", {
-        ...filters.value,
-        limit: 2,
-        isHome: true,
+    watch(filters, (filters) => {
+      console.log(filters);
+    });
+
+    onBeforeMount(() => {
+      fetchAllPost({
+        filters: { ...filters.value, where: "", limit: 2, isHome: true },
+        page: filters.value.page,
+        totalRows: pagination.value.totalRows,
       });
     });
 

@@ -3,15 +3,11 @@ import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import authApi from "../apis/authApi";
+import { emptyObject } from "../utils/function";
 
 export default defineComponent({
   setup() {
     const drawer = ref(null);
-    const links = ref([
-      ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
-      ["mdi-clipboard-text", "Category", "/manager/category"],
-      ["mdi-clipboard-text", "Post", "/manager/post"],
-    ]);
     const store = useStore();
     const router = useRouter();
     const theme = ref(localStorage.getItem("theme") || "light");
@@ -22,13 +18,27 @@ export default defineComponent({
     }
 
     const user = computed(() =>
-      Object.keys(store.state.auth.user).length === 0
-        ? null
-        : store.state.auth.user
+      emptyObject(store.state.auth.user) ? null : store.state.auth.user
     );
 
-    console.log(user);
+    const role = computed(
+      () => !emptyObject(store.state.auth.user) && store.state.auth.user.role
+    );
 
+    console.log(store.state.auth.user);
+
+    const linkPrivate = [
+      ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
+      ["mdi-clipboard-text", "Category", "/manager/category"],
+      ["mdi-clipboard-text", "Post", "/manager/post"],
+    ];
+    const linkPublic = [["mdi-clipboard-text", "Post", "/manager/post"]];
+
+    const links = computed(() =>
+      role.value && role.value.toLowerCase() !== "admin"
+        ? linkPublic
+        : linkPrivate
+    );
     store.dispatch("auth/getCurrentUserLogin").catch(async (error) => {
       if (
         error.response &&
@@ -89,11 +99,11 @@ export default defineComponent({
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" temporary>
-      <v-list-item v-for="[icon, text, to] in links" :key="icon" link>
-        <router-link :to="to" class="text-decoration-none d-flex">
+      <v-list-item v-for="[icon, text, to] in links" :key="icon" link :to="to">
+        <template v-slot:prepend>
           <v-icon class="mr-3">{{ icon }}</v-icon>
-          <v-list-item-title> {{ text }} </v-list-item-title>
-        </router-link>
+        </template>
+        <v-list-item-title> {{ text }} </v-list-item-title>
       </v-list-item>
     </v-navigation-drawer>
 

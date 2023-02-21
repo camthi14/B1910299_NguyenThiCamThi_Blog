@@ -6,6 +6,12 @@ export function convertToSlug(Text) {
     .replace(/[^\w-]+/g, "");
 }
 
+export function emptyObject(obj) {
+  if (!obj || obj === undefined) return false;
+
+  return Object.keys(obj).length === 0;
+}
+
 export function uploadImage(loader) {
   return {
     upload: () => {

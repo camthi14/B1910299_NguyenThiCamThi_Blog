@@ -60,11 +60,23 @@ const mutations = {
     state.error = error;
   },
   setFilter: (state, payload) => {
-    console.log("setFilter", payload);
     state.filters = {
       ...state.filters,
       ...payload,
     };
+  },
+  resetValue: (state) => {
+    state.filters = {
+      page: 1,
+      limit: 5,
+      where: "",
+    };
+    state.pagination = {
+      page: 1,
+      limit: 5,
+      totalRows: 5,
+    };
+    state.posts = [];
   },
 };
 
@@ -110,6 +122,11 @@ const actions = {
   fetchAllPost: async ({ commit, dispatch }, payload) => {
     try {
       commit("fetchStart");
+      commit("setFilter", {
+        page: payload.page,
+        limit: payload.limit,
+        where: payload.where,
+      });
 
       const response = await postApi.getAll(payload);
 
@@ -221,8 +238,10 @@ const actions = {
     });
   },
   changeFilter: ({ commit }, payload) => {
-    console.log("changeFilter", payload);
     commit("setFilter", payload);
+  },
+  reset({ commit }) {
+    commit("resetValue");
   },
 };
 
@@ -234,6 +253,7 @@ const getters = {
         createdAt: moment(post.createdAt).format("YYYY-MM-DD h:mm A"),
       }));
     }
+    return [];
   },
 };
 

@@ -1,6 +1,14 @@
 <script>
-import { computed, defineComponent, onMounted, ref } from "@vue/runtime-core";
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from "@vue/runtime-core";
 import { useStore } from "vuex";
+import { emptyObject } from "../../../utils/function";
 
 export default defineComponent({
   setup() {
@@ -13,8 +21,26 @@ export default defineComponent({
     const selected = ref();
     const dialog = ref(false);
 
-    onMounted(() => {
-      store.dispatch("post/fetchAllPost", {
+    const user = computed(
+      () => !emptyObject(store.state.auth.user) && store.state.auth.user
+    );
+
+    const fetchAllPost = (filters) => {
+      if (user.value && user.value?.role.toLowerCase() !== "admin")
+        filters = {
+          ...filters,
+          where: "user_id," + user.value._id,
+        };
+      store.dispatch("post/fetchAllPost", filters);
+    };
+
+    onBeforeUnmount(() => {
+      console.log("OnBeforeUnmount post admin");
+      store.dispatch("post/reset");
+    });
+
+    onBeforeMount(() => {
+      fetchAllPost({
         ...filters.value,
         page: 1,
         limit: 5,
@@ -28,14 +54,11 @@ export default defineComponent({
 
     const handleDelete = (post) => {
       dialog.value = false;
-      store.dispatch("post/fetchDeletePost", {
-        id: post._id,
-        isDelete: false,
-      });
+      fetchAllPost({ id: post._id, isDelete: false });
     };
 
     const onChangePage = (value) => {
-      store.dispatch("post/fetchAllPost", {
+      fetchAllPost({
         ...filters.value,
         page: value,
       });
@@ -51,6 +74,7 @@ export default defineComponent({
       URL,
       dialog,
       selected,
+      user,
     };
   },
 });
@@ -90,7 +114,7 @@ export default defineComponent({
               <th class="text-left">Hành động</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="posts.length">
             <tr v-for="post in posts" :key="post._id">
               <td class="py-3 px-2">
                 <v-row no-gutters>
@@ -151,6 +175,8 @@ export default defineComponent({
               </td>
             </tr>
           </tbody>
+
+          <p v-else>Bạn chưa đăng bài viết nào.</p>
         </v-table>
       </div>
 
