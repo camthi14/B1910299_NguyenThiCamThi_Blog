@@ -91,7 +91,7 @@ class PostService extends ParentService {
         if (!response) {
           return resolve({
             errors: {
-              messagse: `Tiêu đề "${slug}" không tồn tại`,
+              message: `Tiêu đề "${slug}" không tồn tại`,
             },
             status: 404,
             elements: null,
@@ -111,11 +111,13 @@ class PostService extends ParentService {
             _id: category_id._id,
             name: category_id.name,
             slug: category_id.slug,
-            parent: {
-              _id: elements._id,
-              name: elements.name,
-              slug: elements.slug,
-            },
+            parent: elements
+              ? {
+                  _id: elements._id,
+                  name: elements.name,
+                  slug: elements.slug,
+                }
+              : null,
           },
         };
         resolve({
@@ -123,10 +125,11 @@ class PostService extends ParentService {
           status: 200,
           elements: result,
           meta: {
-            messagse: "Lấy bài viết qua slug thành công!",
+            message: "Lấy bài viết qua slug thành công!",
           },
         });
       } catch (error) {
+        console.log("error", error);
         reject(error);
       }
     });

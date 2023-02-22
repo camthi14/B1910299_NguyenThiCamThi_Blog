@@ -11,7 +11,7 @@ Get {{url}}/children
 
 ###Get by id
 
-Get {{url}}/63d5e169d08aebe295d5e1af
+Get {{url}}/63de297f425226c500ff08fc
 
 ###Get parent id
 
@@ -44,3 +44,6 @@ DELETE {{url}}/63c02b529c4b9f9692bb0f0e
 ###delete vinh vien
 
 DELETE {{url}}/force/63c02b529c4b9f9692bb0f0e
+
+###Get by slug
+Get {{url}}/slug/MON-CHAY

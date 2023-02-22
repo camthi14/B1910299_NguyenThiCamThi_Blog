@@ -17,7 +17,7 @@ require("./v1/database/init.mongodb");
 app.use(express.static(__dirname + "/assets/upload"));
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 app.use(cors(OPTION_CORS));
 app.use(express.json());
 app.use(cookieParser());

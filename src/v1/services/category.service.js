@@ -48,6 +48,58 @@ class CategoryService extends ParentService {
     });
   };
 
+  getBySlug = (slug) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const findCategory = await this.model
+          .findOne({
+            slug,
+            is_delete: false,
+          })
+          .select("name slug level")
+          .exec();
+
+        if (!findCategory) {
+          return resolve({
+            errors: {
+              message: `Danh mục với slug là ${slug} không tồn tại`,
+            },
+            status: 404,
+          });
+        }
+
+        let childrens = [];
+        let result = {
+          ...findCategory._doc,
+          childrens: [],
+        };
+
+        if (findCategory.level === 1) {
+          const { elements } = await this.getByParentId(findCategory._id);
+          childrens = [...elements];
+        }
+
+        if (childrens.length > 0) {
+          result = {
+            ...result,
+            childrens: [...childrens],
+          };
+        }
+
+        resolve({
+          errors: null,
+          elements: result,
+          status: 200,
+          meta: {
+            message: "Lấy slug danh mục thành công!",
+          },
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   create = (data) => {
     return new Promise(async (resolve, reject) => {
       try {

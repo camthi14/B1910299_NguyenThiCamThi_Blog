@@ -8,6 +8,7 @@ router.get("/children", categoryController.getAllWithChildren);
 router.post("/", categoryController.create);
 router.get("/:id", categoryController.getById);
 router.get("/parent/:id", categoryController.getByParentId);
+router.get("/slug/:slug", categoryController.getBySlug);
 router.patch("/:id", categoryController.update);
 router.delete("/:id", categoryController.delete);
 router.delete("/force/:id", categoryController.deleteForce);
