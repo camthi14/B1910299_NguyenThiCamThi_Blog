@@ -54,5 +54,17 @@ export default defineComponent({
         </v-list-item>
       </div>
     </v-list-item>
+    <!-- <v-tabs style="position: relative">
+        <v-tab v-for="category in categories" :key="category._id" link>
+          <router-link
+            :to="`/category/${category.slug}`"
+            class="text-decoration-none d-flex"
+          >
+            <v-list-item-title class="text-capitalize">
+              {{ category.name }}
+            </v-list-item-title>
+          </router-link>
+        </v-tab>
+      </v-tabs> -->
   </v-navigation-drawer>
 </template>

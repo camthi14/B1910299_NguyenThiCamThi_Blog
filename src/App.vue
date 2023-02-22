@@ -43,12 +43,3 @@ export default defineComponent({
     <toast v-if="open" :open="open" :color="color" :text="text" />
   </div>
 </template>
-
-<style>
-.v-list-item:hover {
-  background: rgba(220, 243, 190, 0.2);
-}
-nav a.router-link-exact-active {
-  color: #62ab00;
-}
-</style>

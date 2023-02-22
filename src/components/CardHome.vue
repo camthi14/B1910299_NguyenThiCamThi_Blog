@@ -7,30 +7,28 @@ import {
 } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import CardHomeItem from "../components/CardHomeItem.vue";
+import OverlayCustom from "../components/OverlayCustom.vue";
 
 export default defineComponent({
   components: {
     CardHomeItem,
+    OverlayCustom,
   },
   setup() {
     const store = useStore();
-
     const posts = computed(() => store.state.post.posts);
     const filters = computed(() => store.state.post.filters);
     const pagination = computed(() => store.state.post.pagination);
+    const loading = computed(() => store.state.post.isLoading);
 
     const fetchAllPost = ({ filters, page, totalRows }) => {
       if (page >= totalRows) return;
       store.dispatch("post/fetchAllPost", filters);
     };
 
-    watch(filters, (filters) => {
-      console.log(filters);
-    });
-
     onBeforeMount(() => {
       fetchAllPost({
-        filters: { ...filters.value, where: "", limit: 2, isHome: true },
+        filters: { ...filters.value, where: "", limit: 5, isHome: true },
         page: filters.value.page,
         totalRows: pagination.value.totalRows,
       });
@@ -54,6 +52,7 @@ export default defineComponent({
     return {
       visibilityChanged,
       posts,
+      loading,
     };
   },
 });
@@ -61,6 +60,7 @@ export default defineComponent({
 <template>
   <v-card>
     <v-card-title>Danh sách bài viết</v-card-title>
+    <OverlayCustom :open="loading" />
     <v-container>
       <v-row dense>
         <CardHomeItem

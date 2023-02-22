@@ -1,3 +1,19 @@
+.v-list-item:hover {
+    background: rgba(220, 243, 190, 0.2);
+}
+
+.router-link-exact-active, .router-link-exact-active>* {
+    color: #62ab00;
+}
+
+.v-list-item--active {
+    color: #62ab00
+}
+
+.listCate {
+    border-bottom: 5px solid #62ab00;
+}
+
 .cursor-point {
     cursor: pointer;
 }
@@ -12,6 +28,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.img-avt {
+    object-fit: cover;
+    max-width: 100%;
+    object-position: center;
+    height: auto;
 }
 
 @-moz-keyframes loader {

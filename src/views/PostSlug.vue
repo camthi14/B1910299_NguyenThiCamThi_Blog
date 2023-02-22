@@ -52,7 +52,6 @@ export default defineComponent({
     });
 
     return {
-      getPostBySlug,
       slug,
       post,
       loading,
@@ -62,17 +61,19 @@ export default defineComponent({
 </script>
 
 <template>
-  <v-row>
-    <v-col cols="12" sm="8">
-      <v-sheet rounded="lg" min-height="268">
-        <PostDetail v-if="!loading" :post="post" />
-      </v-sheet>
-    </v-col>
+  <v-container>
+    <v-row>
+      <v-col cols="12" sm="8">
+        <v-sheet rounded="lg">
+          <PostDetail v-if="!loading" :post="post" />
+        </v-sheet>
+      </v-col>
 
-    <v-col cols="12" sm="4">
-      <v-sheet rounded="lg" min-height="268">
-        <CardHome />
-      </v-sheet>
-    </v-col>
-  </v-row>
+      <v-col cols="12" sm="4">
+        <v-sheet rounded="lg">
+          <CardHome />
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

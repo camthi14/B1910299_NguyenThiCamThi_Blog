@@ -4,10 +4,10 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import authApi from "../apis/authApi";
 import { emptyObject } from "../utils/function";
+import image from "../../public/img/Ashley can cook.png";
 
 export default defineComponent({
   setup() {
-    const drawer = ref(null);
     const store = useStore();
     const router = useRouter();
     const theme = ref(localStorage.getItem("theme") || "light");
@@ -25,14 +25,14 @@ export default defineComponent({
       () => !emptyObject(store.state.auth.user) && store.state.auth.user.role
     );
 
-    console.log(store.state.auth.user);
-
     const linkPrivate = [
-      ["mdi-inbox-arrow-down", "Dashboard", "/manager/dashboard"],
-      ["mdi-clipboard-text", "Category", "/manager/category"],
-      ["mdi-clipboard-text", "Post", "/manager/post"],
+      ["mdi-account-box-outline", "Thông tin của bạn", "/manager/dashboard"],
+      ["mdi-palette-advanced", "Quản lý danh mục", "/manager/category"],
+      ["mdi-clipboard-text", "Quản lý bài viết", "/manager/post"],
     ];
-    const linkPublic = [["mdi-clipboard-text", "Post", "/manager/post"]];
+    const linkPublic = [
+      ["mdi-clipboard-text", "Quản lý bài viết", "/manager/post"],
+    ];
 
     const links = computed(() =>
       role.value && role.value.toLowerCase() !== "admin"
@@ -68,9 +68,9 @@ export default defineComponent({
       onClick,
       handleLogout,
       theme,
-      drawer,
       user,
       links,
+      image,
     };
   },
 });
@@ -78,41 +78,71 @@ export default defineComponent({
 
 <template>
   <v-app id="inspire" :theme="theme">
-    <v-app-bar>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <router-link to="/">
-        <v-avatar class="" color="grey-darken-1" size="32"></v-avatar>
-      </router-link>
-      <v-toolbar-title>Hello, {{ user && user.email }}</v-toolbar-title>
-
-      <v-btn
-        :prepend-icon="
-          theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+    <v-navigation-drawer>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
         "
-        @click="onClick"
+        class="ma-2"
       >
-        Toggle Theme
-      </v-btn>
-
-      <v-btn variant="outlined" @click="handleLogout">Đăng xuất</v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer v-model="drawer" temporary>
-      <v-list-item v-for="[icon, text, to] in links" :key="icon" link :to="to">
-        <template v-slot:prepend>
-          <v-icon class="mr-3">{{ icon }}</v-icon>
-        </template>
-        <v-list-item-title> {{ text }} </v-list-item-title>
-      </v-list-item>
+        <router-link to="/">
+          <v-avatar size="64">
+            <img :src="image" alt="avt" class="img-avt" />
+          </v-avatar>
+        </router-link>
+        <v-toolbar-title>Hello, {{ user && user.full_name }}</v-toolbar-title>
+      </div>
+      <v-list class="mt-5">
+        <v-list-item
+          v-for="[icon, text, to] in links"
+          :key="icon"
+          link
+          :to="to"
+        >
+          <template v-slot:prepend>
+            <v-icon class="mr-3">{{ icon }}</v-icon>
+          </template>
+          <v-list-item-title> {{ text }} </v-list-item-title>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
+    <v-container fluid>
+      <v-row>
+        <v-col>
+          <v-app-bar>
+            <v-row>
+              <v-col>
+                <v-btn to="/" class="text-success font-weight-light"
+                  >Home</v-btn
+                >
+              </v-col>
+              <v-col
+                style="display: flex; justify-content: end; margin-right: 18px"
+              >
+                <v-btn
+                  :prepend-icon="
+                    theme === 'light'
+                      ? 'mdi-weather-sunny'
+                      : 'mdi-weather-night'
+                  "
+                  @click="onClick"
+                >
+                </v-btn>
 
-    <v-main>
-      <v-container>
-        <v-row>
-          <router-view />
-        </v-row>
-      </v-container>
-    </v-main>
+                <v-btn variant="outlined" @click="handleLogout"
+                  >Đăng xuất</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-app-bar>
+          <v-main>
+            <router-view />
+          </v-main>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-app>
 </template>

@@ -14,6 +14,12 @@ const homeRoute = [
           import(/* webpackChunkName: "HomeView" */ "../views/HomeView.vue"),
       },
       {
+        path: "/about-me",
+        name: "about-me",
+        component: () =>
+          import(/* webpackChunkName: "HomeView" */ "../views/AboutMe.vue"),
+      },
+      {
         path: "category/:slug",
         name: "category.slug",
         component: () =>

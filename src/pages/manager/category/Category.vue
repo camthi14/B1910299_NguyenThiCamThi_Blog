@@ -3,6 +3,7 @@ import MenuList from "../../../components/manager/MenuList.vue";
 import { useStore } from "vuex";
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import categoryApi from "../../../apis/categoryApi";
+import Toast from "../../../components/Toast.vue";
 
 export default defineComponent({
   components: {

@@ -4,7 +4,6 @@ import {
   defineComponent,
   onBeforeMount,
   onBeforeUnmount,
-  onMounted,
   ref,
 } from "@vue/runtime-core";
 import { useStore } from "vuex";
@@ -35,7 +34,7 @@ export default defineComponent({
     };
 
     onBeforeUnmount(() => {
-      console.log("OnBeforeUnmount post admin");
+      // console.log("OnBeforeUnmount post admin");
       store.dispatch("post/reset");
     });
 
@@ -43,7 +42,7 @@ export default defineComponent({
       fetchAllPost({
         ...filters.value,
         page: 1,
-        limit: 5,
+        limit: 3,
       });
     });
 

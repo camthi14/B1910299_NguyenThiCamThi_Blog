@@ -15,9 +15,11 @@ export default defineComponent({
     let onboarding = ref(0);
 
     const posts = computed(() => store.state.post.posts);
+    const filters = computed(() => store.state.category.filters);
+    const pagination = computed(() => store.state.category.pagination);
 
     onBeforeMount(() => {
-      store.dispatch("post/fetchAllPostSlide");
+      store.dispatch("post/fetchAllPostSlide", { filters, pagination });
     });
     return {
       onboarding,
@@ -65,7 +67,9 @@ export default defineComponent({
           </v-card-item>
 
           <v-card-actions>
-            <v-btn variant="outlined">Khám phá </v-btn>
+            <v-btn :to="`/post/${post.slug}`" variant="outlined"
+              >Khám phá
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-img>
