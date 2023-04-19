@@ -24,6 +24,7 @@ defineProps({
     </template>
 
     <v-list density="compact">
+      <!-- eslint-disable -->
       <v-list-item active-color="primary" variant="plain" class="cursor-point">
         <router-link
           :to="`/manager/category/add/children/${selected._id}`"
@@ -51,7 +52,7 @@ defineProps({
       <v-list-item
         active-color="primary"
         variant="plain"
-        class="cursor-point text-blue"
+        class="cursor-point text-primary"
       >
         <router-link
           :to="`/manager/category/update/${selected._id}`"

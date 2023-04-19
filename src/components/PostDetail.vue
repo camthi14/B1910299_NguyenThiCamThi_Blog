@@ -35,13 +35,14 @@ export default defineComponent({
 
       <v-card-title class="text-h4">{{ post.title }}</v-card-title>
       <v-card-subtitle class="font-weight-bold text-h6">
-        {{ post.author }} -
-        <span>{{ timeStamp }}</span>
+        Đăng bởi: {{ post.author }} -
+        <span>Thời gian tạo: {{ timeStamp }}</span>
       </v-card-subtitle>
     </div>
 
     <div class="my-3">
       <v-card-text>{{ post.detail_text }}</v-card-text>
+      <!-- eslint-disable -->
       <v-card-text v-html="post.detail_html"></v-card-text>
     </div>
   </v-card>

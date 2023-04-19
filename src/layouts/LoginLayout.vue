@@ -31,9 +31,7 @@ export default defineComponent({
       <v-btn to="/login" class="text-success mr-2" variant="outlined">
         Đăng nhập
       </v-btn>
-      <v-btn to="/register" class="text-primary" variant="outlined">
-        Đăng Ký
-      </v-btn>
+      <v-btn to="/register" color="primary" variant="outlined"> Đăng Ký </v-btn>
     </v-app-bar>
 
     <v-main class="loginLayout">

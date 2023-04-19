@@ -159,7 +159,8 @@ export default defineComponent({
                 <div class="d-flex">
                   <router-link
                     :to="`/manager/post/update/${post._id}`"
-                    class="text-decoration-none text-primary mx-4"
+                    class="text-decoration-none mx-4"
+                    color="primary"
                   >
                     <v-icon icon="mdi-pencil-box-outline" class="text-h4">
                     </v-icon>

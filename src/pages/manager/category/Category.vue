@@ -106,7 +106,7 @@ export default defineComponent({
   <v-row>
     <v-col>
       <div class="d-flex justify-space-between my-4">
-        <h1>Danh mục</h1>
+        <h1>Quản lý danh mục</h1>
 
         <router-link to="/manager/category/add" class="text-decoration-none">
           <v-btn>Thêm danh mục</v-btn>

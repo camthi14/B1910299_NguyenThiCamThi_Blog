@@ -59,7 +59,7 @@ export default defineComponent({
 </script>
 <template>
   <v-card>
-    <v-card-title>Danh sách bài viết</v-card-title>
+    <v-card-title>Danh sách bài viết mới</v-card-title>
     <OverlayCustom :open="loading" />
     <v-container>
       <v-row dense>
