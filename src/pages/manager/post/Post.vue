@@ -98,7 +98,7 @@ export default defineComponent({
         <h1>Quản lý bài viết</h1>
 
         <router-link to="/manager/post/add" class="text-decoration-none">
-          <v-btn>Thêm bài viết</v-btn>
+          <v-btn class="text-success" variant="outlined">Thêm bài viết</v-btn>
         </router-link>
       </div>
 

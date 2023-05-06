@@ -109,7 +109,7 @@ export default defineComponent({
         <h1>Quản lý danh mục</h1>
 
         <router-link to="/manager/category/add" class="text-decoration-none">
-          <v-btn>Thêm danh mục</v-btn>
+          <v-btn class="text-success" variant="outlined">Thêm danh mục</v-btn>
         </router-link>
       </div>
 
