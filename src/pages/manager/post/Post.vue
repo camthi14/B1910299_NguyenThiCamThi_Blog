@@ -7,6 +7,7 @@ import {
   ref,
 } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import postApi from "../../../apis/postApi";
 import { emptyObject } from "../../../utils/function";
 
 export default defineComponent({
@@ -51,8 +52,20 @@ export default defineComponent({
       dialog.value = true;
     };
 
-    const handleDelete = (post) => {
+    const handleDelete = async (post) => {
       dialog.value = false;
+
+      const response = await postApi.delete({ id: post._id });
+
+      if (response) {
+        const payload = {
+          text: "Xoá thành công!",
+          color: "success",
+          open: true,
+        };
+        store.dispatch("toast/startToast", payload);
+      }
+
       fetchAllPost({ id: post._id, isDelete: false });
     };
 
